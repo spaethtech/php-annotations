@@ -1,0 +1,31 @@
+{
+    "name": "mvqn/annotations",
+    "description": "Annotation library for MVQN projects.",
+    "minimum-stability": "stable",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Spaeth",
+            "email": "rspaeth@mvqn.net"
+        }
+    ],
+    "require": {
+        "php": "~7.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "7.2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "MVQN\\": "src/MVQN/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\MVQN\\": "tests/MVQN/"
+        }
+    }
+}
