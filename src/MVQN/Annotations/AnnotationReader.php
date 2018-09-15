@@ -134,10 +134,10 @@ final class AnnotationReader
             // Loop through each provided class and attempt to delete them individually...
             foreach($classes as $class)
             {
-                $cacheFile = realpath(self::$cachePath."/.cache/".$class.".json");
+                $cacheFile = self::$cachePath."/.cache/".$class;
 
                 if(file_exists($cacheFile))
-                    unlink($cacheFile);
+                    self::removeDirectoryRecursive($cacheFile);
             }
         }
     }
@@ -261,7 +261,7 @@ final class AnnotationReader
             $value = is_array($value) ? array_map("trim", $value) : trim($value);
             */
 
-            // IF there is more than one occurrence of this @<param>...
+            // IF there is more than one occurrence of this @<keyword>...
             if($count > 1)
             {
                 // THEN check to see if this is the first occurrence...
@@ -632,7 +632,12 @@ final class AnnotationReader
     public function getMethodAnnotationsLike(string $method, string $pattern): array
     {
         $annotations = $this->getMethodAnnotations($method);
-        $matches = preg_grep($pattern, $annotations);
+        //$matches = preg_grep($pattern, $annotations);
+
+        $matches = [];
+        foreach($annotations as $key => $value)
+            if(preg_match($pattern, $key))
+                $matches[$key] = $value;
 
         return $matches;
     }
@@ -707,8 +712,13 @@ final class AnnotationReader
      */
     public function getPropertyAnnotationsLike(string $property, string $pattern): array
     {
-        $params = $this->getPropertyAnnotations($property);
-        $matches = preg_grep($pattern, $params);
+        $annotations = $this->getPropertyAnnotations($property);
+        //$matches = preg_grep($pattern, $params);
+
+        $matches = [];
+        foreach($annotations as $key => $value)
+            if(preg_match($pattern, $key))
+                $matches[$key] = $value;
 
         return $matches;
     }

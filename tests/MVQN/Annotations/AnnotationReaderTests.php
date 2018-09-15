@@ -8,6 +8,7 @@
 
 namespace Tests\MVQN\Annotations;
 
+use MVQN\Annotations\Annotation;
 use MVQN\Annotations\AnnotationReader;
 use Tests\MVQN\Annotations\Examples\Country;
 
@@ -18,28 +19,39 @@ class AnnotationReaderTests extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        //AnnotationReader::cacheDir(__DIR__);
         $this->classReader = new AnnotationReader(Country::class);
     }
 
+
+
+    #region CACHING
+
     public function testCache()
     {
+        AnnotationReader::cacheDir(__DIR__);
         print_r($this->classReader->getAnnotations());
-        //print_r($this->classReader->getClassAnnotations());
-        //$this->classReader->getMethodAnnotations();
-        //$this->classReader->getPropertyAnnotations();
 
-        //print_r($this->classReader->getMethodAnnotations("getCode"));
+        $path = AnnotationReader::cacheDir()."/.cache/".Country::class;
+
+        $this->assertFileExists($path."/class.json");
+        $this->assertFileExists($path."/method.getName.json");
+        $this->assertFileExists($path."/method.getCode.json");
+        $this->assertFileExists($path."/property.name.json");
+        $this->assertFileExists($path."/property.code.json");
     }
 
     public function testClearCache()
     {
+        AnnotationReader::cacheDir(__DIR__);
         //$this->classReader->cacheClear();
         $this->classReader->cacheClear([Country::class]);
+
+        $path = AnnotationReader::cacheDir()."/.cache/".Country::class;
+
+        $this->assertFileNotExists($path."/class.json");
     }
 
-
-
+    #endregion
 
     #region REFLECTION
 
@@ -154,23 +166,129 @@ class AnnotationReaderTests extends \PHPUnit\Framework\TestCase
         echo "> $annotationClass\n";
         echo "\n";
 
-        $this->assertEquals("Tests\MVQN\Annotations\Examples\EndpointAnnotation", $annotationClass);
+        $this->assertEquals("Tests\MVQN\Annotations\EndpointAnnotation", $annotationClass);
     }
 
     #endregion
 
-
+    #region ANNOTATIONS: Class
 
     public function testGetClassAnnotations()
     {
         $annotations = $this->classReader->getClassAnnotations();
-
         print_r($annotations);
 
-
+        $this->assertEquals("rspaeth@mvqn.net", $annotations["author"]["email"]);
     }
 
+    public function testGetClassAnnotation()
+    {
+        $annotations = $this->classReader->getClassAnnotation("endpoint");
+        print_r($annotations);
 
+        $this->assertEquals("/countries", $annotations["get"]);
+    }
 
+    public function testGetClassAnnotationsLike()
+    {
+        $annotations = $this->classReader->getClassAnnotationsLike("/endpoint[s]*/");
+        print_r($annotations);
+
+        $this->assertCount(2, $annotations);
+    }
+
+    public function testHasClassAnnotation()
+    {
+        $annotations = $this->classReader->hasClassAnnotation("endpoint");
+
+        $this->assertTrue($annotations);
+    }
+
+    #endregion
+
+    #region ANNOTATIONS: Method
+
+    public function testGetMethodAnnotations()
+    {
+        $annotations = $this->classReader->getMethodAnnotations();
+        print_r($annotations);
+
+        $this->assertArrayHasKey("getName", $annotations);
+        $this->assertArrayHasKey("getCode", $annotations);
+
+        $annotations = $this->classReader->getMethodAnnotations("getName");
+        print_r($annotations);
+
+        $this->assertArrayHasKey("return", $annotations);
+    }
+
+    public function testGetMethodAnnotation()
+    {
+        $annotations = $this->classReader->getMethodAnnotation("getName", "return");
+        print_r($annotations);
+
+        $this->assertArrayHasKey("types", $annotations);
+        $this->assertArrayHasKey("description", $annotations);
+    }
+
+    public function testGetMethodAnnotationsLike()
+    {
+        $annotations = $this->classReader->getMethodAnnotationsLike("getName", "/return/");
+        print_r($annotations);
+
+        $this->assertCount(1, $annotations);
+    }
+
+    public function testHasMethodAnnotation()
+    {
+        $annotations = $this->classReader->hasMethodAnnotation("getName", "return");
+
+        $this->assertTrue($annotations);
+    }
+
+    #endregion
+
+    #region ANNOTATIONS: Property
+
+    public function testGetPropertyAnnotations()
+    {
+        $annotations = $this->classReader->getPropertyAnnotations();
+        print_r($annotations);
+
+        $this->assertArrayHasKey("name", $annotations);
+        $this->assertArrayHasKey("code", $annotations);
+
+        $annotations = $this->classReader->getPropertyAnnotations("name");
+        print_r($annotations);
+
+        $this->assertArrayHasKey("var", $annotations);
+    }
+
+    public function testGetPropertyAnnotation()
+    {
+        $annotations = $this->classReader->getPropertyAnnotation("name", "var");
+        print_r($annotations);
+
+        $this->assertArrayHasKey("types", $annotations);
+        $this->assertArrayHasKey("name", $annotations);
+        $this->assertArrayHasKey("description", $annotations);
+    }
+
+    public function testGetPropertyAnnotationsLike()
+    {
+        $annotations = $this->classReader->getPropertyAnnotationsLike("name", "/var/");
+        print_r($annotations);
+
+        $this->assertCount(1, $annotations);
+    }
+
+    public function testHasPropertyAnnotation()
+    {
+        $annotations = $this->classReader->hasPropertyAnnotation("name", "var");
+
+        $this->assertTrue($annotations);
+    }
+
+    #endregion
 
 }
