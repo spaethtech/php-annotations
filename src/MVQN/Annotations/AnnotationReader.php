@@ -420,7 +420,7 @@ final class AnnotationReader
             // IF the current annotation class does not extend Annotation...
             if (!is_subclass_of($annotationClass, Annotation::class, true)) {
                 // THEN, assume it is handled by another library and return NULL!
-                return null;
+                //return null;
             }
 
             // Return the fully qualified class, if nothing went wrong!
