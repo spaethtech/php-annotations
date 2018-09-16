@@ -535,10 +535,10 @@ final class AnnotationReader
 
     /**
      * @param string $keyword The keyword of an annotation for this class.
-     * @return array Returns an associative array of the specified annotation for the current class.
+     * @return mixed Returns the value of the specified annotation for the current class.
      * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getClassAnnotation(string $keyword): array
+    public function getClassAnnotation(string $keyword)//: array
     {
         $params = $this->getClassAnnotations();
         return array_key_exists($keyword, $params) ? $params[$keyword] : [];
@@ -614,10 +614,10 @@ final class AnnotationReader
     /**
      * @param string $method The method of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this method.
-     * @return array Returns an associative array of the annotation for the given method of the current class.
+     * @return mixed Returns the value of the annotation for the given method of the current class.
      * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getMethodAnnotation(string $method, string $keyword): array
+    public function getMethodAnnotation(string $method, string $keyword)//: array
     {
         $annotations = $this->getMethodAnnotations($method);
         return array_key_exists($keyword, $annotations) ? $annotations[$keyword] : [];
@@ -695,10 +695,10 @@ final class AnnotationReader
     /**
      * @param string $property The property of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this property.
-     * @return array Returns an associative array of the annotation for the give property of the current class.
+     * @return mixed Returns the value of the annotation for the give property of the current class.
      * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getPropertyAnnotation(string $property, string $keyword): array
+    public function getPropertyAnnotation(string $property, string $keyword)//: array
     {
         $params = $this->getPropertyAnnotations($property);
         return array_key_exists($keyword, $params) ? $params[$keyword] : [];
