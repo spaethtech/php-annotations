@@ -636,6 +636,11 @@ final class AnnotationReader
             }
         }
 
+        if(count($methods) === 1)
+        {
+            return $annotations[$methods[0]];
+        }
+
         return $annotations;
     }
 
@@ -734,6 +739,11 @@ final class AnnotationReader
 
                 $annotations[$property] = $params;
             }
+        }
+
+        if(count($properties) === 1)
+        {
+            return $annotations[$properties[0]];
         }
 
         return $annotations;
