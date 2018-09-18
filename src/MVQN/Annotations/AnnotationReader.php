@@ -525,12 +525,21 @@ final class AnnotationReader
      */
     public function getClassAnnotations(): array
     {
+        if(AnnotationReader::cacheDir() !== null)
+        {
+            $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+            $file = "class.json";
+
+            if(file_exists($path."/".$file))
+            {
+                $annotations = json_decode(file_get_contents($path."/".$file), true);
+                return $annotations;
+            }
+        }
+
         $docBlock = $this->getReflectedClass()->getDocComment();
-
-        if(!$docBlock)
-            return [];
-
-        return $this->parse(self::PARSE_STYLE_CLASS, $docBlock);
+        $params = $this->parse(self::PARSE_STYLE_CLASS, $docBlock);
+        return $params;
     }
 
     /**
@@ -579,36 +588,55 @@ final class AnnotationReader
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * @param string|null $method An optional method for which to get all annotations, or NULL for all methods.
+     * @param string[] $methods
      * @return array Returns an associative array of all annotations for the method(s) of the current class.
      * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getMethodAnnotations(string $method = null): array
+    public function getMethodAnnotations(string ...$methods): array
     {
-        if($method === null)
+        if($methods === [])
         {
-            $annotations = [];
-
-            $methods = $this->getReflectedMethods();
-
-            /** @var \ReflectionMethod $method */
-            foreach($methods as $method)
+            foreach($this->getReflectedMethods() as $reflectedMethod)
             {
-                $name = $method->getName();
-                $annotations[$name] = $this->getMethodAnnotations($name);
+                /** @var \ReflectionMethod $reflectedMethod */
+                $methods[] = $reflectedMethod->getName();
             }
-
-            return $annotations;
         }
 
-        $docBlock = $this->getReflectedMethod($method)->getDocComment();
+        $annotations = [];
 
-        if(!$docBlock)
-            return [];
+        foreach($methods as $method)
+        {
+            $missing = true;
 
-        $params = $this->parse(self::PARSE_STYLE_METHOD, $docBlock, $method);
+            // IF caching is enabled...
+            if(AnnotationReader::cacheDir() !== null)
+            {
+                $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+                $file = $path."/method.$method.json";
 
-        return $params;
+                if(file_exists($file))
+                {
+                    $params = json_decode(file_get_contents($file), true);
+
+                    if(json_last_error() === JSON_ERROR_NONE)
+                    {
+                        $missing = false;
+                        $annotations[$method] = $params;
+                    }
+                }
+            }
+
+            if($missing)
+            {
+                $docBlock = $this->getReflectedMethod($method)->getDocComment();
+                $params = $this->parse(self::PARSE_STYLE_METHOD, $docBlock, $method);
+
+                $annotations[$method] = $params;
+            }
+        }
+
+        return $annotations;
     }
 
     /**
@@ -660,36 +688,55 @@ final class AnnotationReader
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * @param string|null $property An optional property for which to get all annotations, or NULL for all properties.
+     * @param string[] $properties
      * @return array Returns an associative array of all annotations for the property/properties of the current class.
      * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getPropertyAnnotations(string $property = null): array
+    public function getPropertyAnnotations(string ...$properties): array
     {
-        if($property === null)
+        if($properties === [])
         {
-            $annotations = [];
-
-            $methods = $this->getReflectedProperties();
-
-            /** @var \ReflectionProperty $property */
-            foreach($methods as $property)
+            foreach($this->getReflectedProperties() as $reflectedProperty)
             {
-                $name = $property->getName();
-                $annotations[$name] = $this->getPropertyAnnotations($name);
+                /** @var \ReflectionProperty $reflectedProperty */
+                $properties[] = $reflectedProperty->getName();
             }
-
-            return $annotations;
         }
 
-        $docBlock = $this->getReflectedProperty($property)->getDocComment();
+        $annotations = [];
 
-        if(!$docBlock)
-            return [];
+        foreach($properties as $property)
+        {
+            $missing = true;
 
-        $params = $this->parse(self::PARSE_STYLE_PROPERTY, $docBlock, $property);
+            // IF caching is enabled...
+            if(AnnotationReader::cacheDir() !== null)
+            {
+                $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+                $file = $path."/property.$property.json";
 
-        return $params;
+                if(file_exists($file))
+                {
+                    $params = json_decode(file_get_contents($file), true);
+
+                    if(json_last_error() === JSON_ERROR_NONE)
+                    {
+                        $missing = false;
+                        $annotations[$property] = $params;
+                    }
+                }
+            }
+
+            if($missing)
+            {
+                $docBlock = $this->getReflectedProperty($property)->getDocComment();
+                $params = $this->parse(self::PARSE_STYLE_PROPERTY, $docBlock, $property);
+
+                $annotations[$property] = $params;
+            }
+        }
+
+        return $annotations;
     }
 
     /**

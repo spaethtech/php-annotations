@@ -18,6 +18,9 @@ use Tests\MVQN\Annotations\EndpointAnnotation as Endpoint;
  * @Endpoint [ "get" => "/countries" ]
  * @\Tests\MVQN\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
  * @EndpointAnnotation [ "post" => "/countries" ]
+ *
+ * @method string|null getName()
+ *
  */
 final class Country
 {
@@ -29,16 +32,6 @@ final class Country
      * @var string|null $name The country's name.
      */
     protected $name;
-
-    /**
-     * @return string|null Returns the country's name.
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * @var string|null The country's abbreviation.
