@@ -538,7 +538,7 @@ final class AnnotationReader
         }
 
         $docBlock = $this->getReflectedClass()->getDocComment();
-        $params = $this->parse(self::PARSE_STYLE_CLASS, $docBlock);
+        $params = $docBlock ? $this->parse(self::PARSE_STYLE_CLASS, $docBlock) : [];
         return $params;
     }
 
@@ -630,7 +630,7 @@ final class AnnotationReader
             if($missing)
             {
                 $docBlock = $this->getReflectedMethod($method)->getDocComment();
-                $params = $this->parse(self::PARSE_STYLE_METHOD, $docBlock, $method);
+                $params = $docBlock ? $this->parse(self::PARSE_STYLE_METHOD, $docBlock, $method) : [];
 
                 $annotations[$method] = $params;
             }
@@ -730,7 +730,7 @@ final class AnnotationReader
             if($missing)
             {
                 $docBlock = $this->getReflectedProperty($property)->getDocComment();
-                $params = $this->parse(self::PARSE_STYLE_PROPERTY, $docBlock, $property);
+                $params = $docBlock ? $this->parse(self::PARSE_STYLE_PROPERTY, $docBlock, $property) : [];
 
                 $annotations[$property] = $params;
             }
