@@ -177,7 +177,7 @@ final class AnnotationReader
         }
 
         // Generate the full filename and path for caching the current Annotation.
-        $cacheFile = self::$cachePath !== null ? self::$cachePath."/.cache/{$this->class}/$targetString.json" : "";
+        $cacheFile = self::$cachePath !== null ? self::$cachePath."/".self::CACHE_FOLDER."/{$this->class}/$targetString.json" : "";
 
         // IF using caching...
         if(self::$cachePath !== null && file_exists($cacheFile))
@@ -529,7 +529,7 @@ final class AnnotationReader
     {
         if(AnnotationReader::cacheDir() !== null)
         {
-            $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+            $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
             $file = "class.json";
 
             if(file_exists($path."/".$file))
@@ -614,7 +614,7 @@ final class AnnotationReader
             // IF caching is enabled...
             if(AnnotationReader::cacheDir() !== null)
             {
-                $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+                $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
                 $file = $path."/method.$method.json";
 
                 if(file_exists($file))
@@ -719,7 +719,7 @@ final class AnnotationReader
             // IF caching is enabled...
             if(AnnotationReader::cacheDir() !== null)
             {
-                $path = AnnotationReader::cacheDir()."/.cache/".$this->class;
+                $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
                 $file = $path."/property.$property.json";
 
                 if(file_exists($file))
