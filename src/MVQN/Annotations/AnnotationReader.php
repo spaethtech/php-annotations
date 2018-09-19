@@ -144,6 +144,34 @@ final class AnnotationReader
         }
     }
 
+
+    public static function hasMethodAnnotationsCached(string $class, string $method): bool
+    {
+        if(self::$cachePath === null)
+            return false;
+
+        // Generate the full filename and path for caching the current Annotation.
+        $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/$class/method.$method.json";
+
+        return file_exists($cacheFile);
+    }
+
+    public static function getMethodAnnotationsCached(string $class, string $method): ?array
+    {
+        if(!self::hasMethodAnnotationsCached($class, $method))
+            return null;
+
+        // Generate the full filename and path for caching the current Annotation.
+        $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/$class/method.$method.json";
+
+        return json_decode(file_get_contents($cacheFile), true);
+    }
+
+
+
+
+
+
     // =================================================================================================================
     // METHODS: Parsing
     // -----------------------------------------------------------------------------------------------------------------
