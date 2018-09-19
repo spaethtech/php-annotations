@@ -51,7 +51,7 @@ final class AnnotationReader
     /** @var string An optional directory to use for caching the annotation results for later lookup. */
     protected static $cachePath = null;
 
-    private const CACHE_FOLDER = ".annotations";
+    private const CACHE_FOLDER = ".cache/mvqn/annotations";
 
     // =================================================================================================================
     // CONSTRUCTOR/DESTRUCTOR
