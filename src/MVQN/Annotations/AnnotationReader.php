@@ -51,6 +51,8 @@ final class AnnotationReader
     /** @var string An optional directory to use for caching the annotation results for later lookup. */
     protected static $cachePath = null;
 
+    private const CACHE_FOLDER = ".annotations";
+
     // =================================================================================================================
     // CONSTRUCTOR/DESTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
@@ -82,8 +84,8 @@ final class AnnotationReader
                 mkdir(dirname($path), 0777, true);
 
             // Create a '.cache' directory inside the cache directory, if it does not exist...
-            if (!file_exists(dirname($path."/.cache/")))
-                mkdir(dirname($path."/.cache/"), 0777, true);
+            if (!file_exists(dirname($path."/".self::CACHE_FOLDER."/")))
+                mkdir(dirname($path."/".self::CACHE_FOLDER."/"), 0777, true);
 
             // Set the cache path, statically, for future use.
             self::$cachePath = $path;
@@ -127,14 +129,14 @@ final class AnnotationReader
             if($classes === null)
             {
                 // Use a specific '.cache' directory as to avoid accidentally deleting undesired folders recursively.
-                self::removeDirectoryRecursive(self::$cachePath."/.cache/");
+                self::removeDirectoryRecursive(self::$cachePath."/".self::CACHE_FOLDER."/");
                 return;
             }
 
             // Loop through each provided class and attempt to delete them individually...
             foreach($classes as $class)
             {
-                $cacheFile = self::$cachePath."/.cache/".$class;
+                $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/".$class;
 
                 if(file_exists($cacheFile))
                     self::removeDirectoryRecursive($cacheFile);
