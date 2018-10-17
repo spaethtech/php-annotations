@@ -26,10 +26,12 @@ final class MethodAnnotation extends Annotation
      */
     public function parse(array $existing = []): array
     {
-        $pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
+        $pattern = '/^\s*(static)*\s*([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
+        //$pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
 
         if(preg_match($pattern, $this->value, $matches))
         {
+            /*
             $param = [];
             $param["types"] = explode("|", $matches[1]);
             $param["name"] = $matches[2];
@@ -37,6 +39,15 @@ final class MethodAnnotation extends Annotation
             $param["description"] = $matches[4];
 
             $existing["method"][$matches[2]] = $param;
+            */
+            $param = [];
+            $param["static"] = ($matches[1] === "static");
+            $param["types"] = explode("|", $matches[2]);
+            $param["name"] = $matches[3];
+            $param["args"] = $matches[4];
+            $param["description"] = $matches[5];
+
+            $existing["method"][$matches[3]] = $param;
         }
 
         return $existing;
