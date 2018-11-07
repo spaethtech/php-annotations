@@ -773,7 +773,7 @@ final class AnnotationReader
 
         if(count($properties) === 1)
         {
-            return $annotations[$properties[0]];
+            //return $annotations[$properties[0]]; // Causing problems with single property classes!
         }
 
         return $annotations;
