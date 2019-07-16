@@ -249,7 +249,7 @@ final class AnnotationReader
                             "annotations for '$annotationClass".($name !== "" ? "::$name" : "")."'!");
 
                     /** @var Annotation $instance */
-                    $instance = new $annotationClass($target, $annotationClass, $name, $key, $value);
+                    $instance = new $annotationClass($target, /* $annotationClass */ $this->class, $name, $key, $value);
                     $params = $instance->parse($params); //, $annotationName);
                     continue;
                 }
