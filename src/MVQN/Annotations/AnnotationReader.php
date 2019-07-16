@@ -810,6 +810,7 @@ final class AnnotationReader
         return $matches;
     }
 
+
     /**
      * @param string $property The property of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this property.
