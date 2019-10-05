@@ -109,7 +109,7 @@ abstract class Annotation
         $annotations = [];
 
         // Loop through each file in the included "Standard" directory...
-        foreach(scandir(__DIR__."/./Standard/") as $annotation)
+        foreach(scandir(__DIR__ . "/./Standard/") as $annotation)
         {
             // IF the file is one of the special "." or ".." files, THEN simply ignore and continue!
             if($annotation === "." || $annotation === "..")
