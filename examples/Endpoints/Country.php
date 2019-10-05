@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\MVQN\Annotations\Examples;
+namespace MVQN\Endpoints;
 
-
-use Tests\MVQN\Annotations\EndpointAnnotation;
-use Tests\MVQN\Annotations\EndpointAnnotation as Endpoint;
+use MVQN\Annotations\EndpointAnnotation;
+use MVQN\Annotations\EndpointAnnotation as Endpoint;
 
 /**
  * Class Country
@@ -16,7 +15,7 @@ use Tests\MVQN\Annotations\EndpointAnnotation as Endpoint;
  *
  * @other-endpoints { "get": "/countries", "getById": "/countries/:id" }
  * @Endpoint [ "get" => "/countries" ]
- * @\Tests\MVQN\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
+ * @\MVQN\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
  * @EndpointAnnotation [ "post" => "/countries" ]
  *
  * @method string|null getName()

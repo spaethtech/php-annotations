@@ -1,10 +1,16 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Annotations;
 
-
 use MVQN\Common\Strings;
+
+use DateTime;
+use Exception;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Class AnnotationReader
@@ -15,22 +21,20 @@ use MVQN\Common\Strings;
  */
 final class AnnotationReader
 {
-    // =================================================================================================================
-    // CONSTANTS
-    // -----------------------------------------------------------------------------------------------------------------
+    #region CONSTANTS
 
     /** @const int The default JSON options for use when caching the annotations. */
     private const CACHE_JSON_OPTIONS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
 
     /** @const int Denote the annotation about to be parsed is on a class declaration. */
-    private const PARSE_STYLE_CLASS = 1;
+    private const PARSE_STYLE_CLASS                 = 1;
     /** @const int Denote the annotation about to be parsed is on a method declaration. */
-    private const PARSE_STYLE_METHOD = 2;
+    private const PARSE_STYLE_METHOD                = 2;
     /** @const int Denote the annotation about to be parsed is on a property declaration. */
-    private const PARSE_STYLE_PROPERTY = 4;
+    private const PARSE_STYLE_PROPERTY              = 4;
 
     // All patterns used for matching the annotations!
-    private const ANNOTATION_PATTERN              = '/(?:\*)(?:[\t ]*)?@([\w\_\-\\\\]+)(?:[\t ]*)?(.*)$/m';
+    private const ANNOTATION_PATTERN                = '/(?:\*)(?:[\t ]*)?@([\w\_\-\\\\]+)(?:[\t ]*)?(.*)$/m';
     //private const ANNOTATION_PATTERN_JSON         = '/(\{.*\})/';
     //private const ANNOTATION_PATTERN_ARRAY        = '/(\[.+\])/';
     //private const ANNOTATION_PATTERN_EVAL         = '/\`(.*)\`/';
@@ -38,9 +42,9 @@ final class AnnotationReader
     //private const ANNOTATION_PATTERN_VAR_TYPE     = '/^([\w\|\[\]\_]+)\s*(?:\$(\w+))?(.*)?/';
     //private const ANNOTATION_PATTERN_PROPERTY     = '/^property-*(read|write|)\s+(\w+)\s+(\$\w+)\s+(.*)$/';
 
-    // =================================================================================================================
-    // PROPERTIES
-    // -----------------------------------------------------------------------------------------------------------------
+    #endregion
+
+    #region PROPERTIES
 
     /** @var string The name of the class, for which any class, method or property annotations exist, to be parsed. */
     protected $class = "";
@@ -53,13 +57,15 @@ final class AnnotationReader
 
     private const CACHE_FOLDER = ".cache/mvqn/annotations";
 
+    #endregion
+
     // =================================================================================================================
     // CONSTRUCTOR/DESTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * @param string $class The name of the class for which to perform all reflections and annotation parsing.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function __construct(string $class)
     {
@@ -181,7 +187,7 @@ final class AnnotationReader
      * @param string $docBlock
      * @param string $name
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function parse(int $target, string $docBlock, string $name = ""): array
     {
@@ -211,8 +217,7 @@ final class AnnotationReader
         if(self::$cachePath !== null && file_exists($cacheFile))
         {
             // THEN simply return the cached results!
-            $params = json_decode(file_get_contents($cacheFile), true);
-            return $params;
+            return json_decode(file_get_contents($cacheFile), true);
         }
 
         // Build a collection of valid lines ONLY!  IF none exist, simply return empty-handed...
@@ -245,7 +250,7 @@ final class AnnotationReader
                         $annotationClass::SUPPORTED_DUPLICATES : true;
 
                     if(!$occurrences && array_key_exists($key, $params))
-                        throw new \Exception("An annotation for '@$key' has already been declared in the set of ".
+                        throw new Exception("An annotation for '@$key' has already been declared in the set of ".
                             "annotations for '$annotationClass".($name !== "" ? "::$name" : "")."'!");
 
                     /** @var Annotation $instance */
@@ -338,7 +343,7 @@ final class AnnotationReader
             if (!file_exists(dirname($cacheFile)))
                 mkdir(dirname($cacheFile), 0777, true);
 
-            $params["_cached"] = (new \DateTime())->format("c");
+            $params["_cached"] = (new DateTime())->format("c");
 
             file_put_contents($cacheFile, json_encode($params, self::CACHE_JSON_OPTIONS));
         }
@@ -348,7 +353,7 @@ final class AnnotationReader
 
     /**
      * @return array Returns an array containing the pairing between class/alias and fully qualified class name.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getUseStatements(): array
     {
@@ -405,7 +410,7 @@ final class AnnotationReader
 
     /**
      * @return string Returns the namespace part of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getNamespace(): string
     {
@@ -417,7 +422,7 @@ final class AnnotationReader
      *
      * @param string $class The class name to be used for the lookup.
      * @return string|null Returns the fully qualified class name or NULL if a valid Annotation class is not found.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function findAnnotationClass(string $class): ?string
     {
@@ -448,7 +453,9 @@ final class AnnotationReader
         if ($annotationClass !== "" && class_exists($annotationClass))
         {
             // IF the current annotation class does not extend Annotation...
-            if (!is_subclass_of($annotationClass, Annotation::class, true)) {
+            /** @noinspection PhpStatementHasEmptyBodyInspection */
+            if (!is_subclass_of($annotationClass, Annotation::class, true))
+            {
                 // THEN, assume it is handled by another library and return NULL!
                 //return null;
             }
@@ -473,56 +480,55 @@ final class AnnotationReader
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * @return \ReflectionClass Returns the current class, using the Reflection engine.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @return ReflectionClass Returns the current class, using the Reflection engine.
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getReflectedClass()
     {
-        $class = new \ReflectionClass($this->class);
-        return $class;
+        return new ReflectionClass($this->class);
     }
 
     /**
      * @param int|null $filter An optional filter to be used to get only certain types of methods.
      * @return array Returns the methods of the current class, given an optional filter, using the Reflection engine.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getReflectedMethods(int $filter = null): array
     {
-        $class = new \ReflectionClass($this->class);
+        $class = new ReflectionClass($this->class);
         return !$filter ? $class->getMethods() : $class->getMethods($filter);
     }
 
     /**
      * @param string $method The name of a specific method to retrieve.
-     * @return \ReflectionMethod Returns a method of the current class, given a name, using the Reflection engine.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @return ReflectionMethod Returns a method of the current class, given a name, using the Reflection engine.
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getReflectedMethod(string $method)
     {
-        $class = new \ReflectionClass($this->class);
+        $class = new ReflectionClass($this->class);
         return $class->getMethod($method);
     }
 
     /**
      * @param int|null $filter An optional filter to be used to get only certain types of properties.
      * @return array Returns the properties of the current class, given an optional filter, using the Reflection engine.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getReflectedProperties(int $filter = null): array
     {
-        $class = new \ReflectionClass($this->class);
+        $class = new ReflectionClass($this->class);
         return !$filter ? $class->getProperties() : $class->getProperties($filter);
     }
 
     /**
      * @param string $property The name of a specific property to retrieve.
-     * @return \ReflectionProperty Returns a property of the current class, given a name, using the Reflection engine.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @return ReflectionProperty Returns a property of the current class, given a name, using the Reflection engine.
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getReflectedProperty(string $property)
     {
-        $class = new \ReflectionClass($this->class);
+        $class = new ReflectionClass($this->class);
         return $class->getProperty($property);
     }
 
@@ -532,7 +538,7 @@ final class AnnotationReader
 
     /**
      * @return array Returns an associative array of all class, method and property annotations for the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getAnnotations(): array
     {
@@ -551,7 +557,7 @@ final class AnnotationReader
 
     /**
      * @return array Returns an associative array of all annotations for the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getClassAnnotations(): array
     {
@@ -562,20 +568,18 @@ final class AnnotationReader
 
             if(file_exists($path."/".$file))
             {
-                $annotations = json_decode(file_get_contents($path."/".$file), true);
-                return $annotations;
+                return json_decode(file_get_contents($path."/".$file), true);
             }
         }
 
         $docBlock = $this->getReflectedClass()->getDocComment();
-        $params = $docBlock ? $this->parse(self::PARSE_STYLE_CLASS, $docBlock) : [];
-        return $params;
+        return $docBlock ? $this->parse(self::PARSE_STYLE_CLASS, $docBlock) : [];
     }
 
     /**
      * @param string $keyword The keyword of an annotation for this class.
      * @return mixed Returns the value of the specified annotation for the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getClassAnnotation(string $keyword)//: array
     {
@@ -586,7 +590,7 @@ final class AnnotationReader
     /**
      * @param string $pattern A pattern for which to search the keywords of annotations for this class.
      * @return array Returns an associative array of any matching annotations for the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getClassAnnotationsLike(string $pattern): array
     {
@@ -604,7 +608,7 @@ final class AnnotationReader
     /**
      * @param string $keyword The keyword of an annotation for this class.
      * @return bool Returns TRUE if the class annotation exists, otherwise FALSE.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function hasClassAnnotation(string $keyword): bool
     {
@@ -618,9 +622,12 @@ final class AnnotationReader
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * @noinspection PhpDocSignatureInspection
      * @param string[] $methods
+     *
      * @return array Returns an associative array of all annotations for the method(s) of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     *
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getMethodAnnotations(string ...$methods): array
     {
@@ -628,7 +635,7 @@ final class AnnotationReader
         {
             foreach($this->getReflectedMethods() as $reflectedMethod)
             {
-                /** @var \ReflectionMethod $reflectedMethod */
+                /** @var ReflectionMethod $reflectedMethod */
                 $methods[] = $reflectedMethod->getName();
             }
         }
@@ -678,7 +685,7 @@ final class AnnotationReader
      * @param string $method The method of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this method.
      * @return mixed Returns the value of the annotation for the given method of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getMethodAnnotation(string $method, string $keyword)//: array
     {
@@ -690,7 +697,7 @@ final class AnnotationReader
      * @param string $method The method of the current class for which to examine.
      * @param string $pattern A pattern for which to search the keywords of annotations for this method.
      * @return array Returns an associative array of matching annotations for the given method of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getMethodAnnotationsLike(string $method, string $pattern): array
     {
@@ -709,7 +716,7 @@ final class AnnotationReader
      * @param string $method The method of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this method.
      * @return bool Returns TRUE if the method annotation exists, otherwise FALSE.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function hasMethodAnnotation(string $method, string $keyword): bool
     {
@@ -723,9 +730,12 @@ final class AnnotationReader
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
+     * @noinspection PhpDocSignatureInspection
      * @param string[] $properties
+     *
      * @return array Returns an associative array of all annotations for the property/properties of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     *
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getPropertyAnnotations(string ...$properties): array
     {
@@ -733,7 +743,7 @@ final class AnnotationReader
         {
             foreach($this->getReflectedProperties() as $reflectedProperty)
             {
-                /** @var \ReflectionProperty $reflectedProperty */
+                /** @var ReflectionProperty $reflectedProperty */
                 $properties[] = $reflectedProperty->getName();
             }
         }
@@ -771,6 +781,7 @@ final class AnnotationReader
             }
         }
 
+        /** @noinspection PhpStatementHasEmptyBodyInspection */
         if(count($properties) === 1)
         {
             //return $annotations[$properties[0]]; // Causing problems with single property classes!
@@ -783,7 +794,7 @@ final class AnnotationReader
      * @param string $property The property of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this property.
      * @return mixed Returns the value of the annotation for the give property of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getPropertyAnnotation(string $property, string $keyword)//: array
     {
@@ -795,7 +806,7 @@ final class AnnotationReader
      * @param string $property The property of the current class for which to examine.
      * @param string $pattern A pattern for which to search the keywords of annotations for this property.
      * @return array Returns an associative array of matching annotations for the given property of the current class.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function getPropertyAnnotationsLike(string $property, string $pattern): array
     {
@@ -815,7 +826,7 @@ final class AnnotationReader
      * @param string $property The property of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this property.
      * @return bool Returns TRUE if the property annotation exists, otherwise FALSE.
-     * @throws \ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
+     * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
     public function hasPropertyAnnotation(string $property, string $keyword): bool
     {

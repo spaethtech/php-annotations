@@ -12,8 +12,10 @@
     ],
     "require": {
         "php": "~7.3",
+
         "ext-curl": "*",
         "ext-json": "*",
+
         "mvqn/common": "~1"
     },
     "require-dev": {
@@ -26,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MVQN\\": "tests/"
+            "MVQN\\": [ "tests/", "examples/" ]
         }
     }
 }

@@ -1,28 +1,30 @@
 <?php
+
+namespace MVQN\Annotations;
+
+use MVQN\Endpoints\Country;
+use PHPUnit\Framework\TestCase;
+use ReflectionException;
+
 /**
- * Created by PhpStorm.
- * User: rspaeth
- * Date: 9/11/2018
- * Time: 12:25 PM
+ * Class AnnotationReaderTests
+ *
+ * @package MVQN\Annotations
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
-
-namespace Tests\MVQN\Annotations;
-
-use MVQN\Annotations\Annotation;
-use MVQN\Annotations\AnnotationReader;
-use Tests\MVQN\Annotations\Examples\Country;
-
-class AnnotationReaderTests extends \PHPUnit\Framework\TestCase
+class AnnotationReaderTests extends TestCase
 {
     /** @var AnnotationReader  */
     protected $classReader = null;
 
-    protected function setUp()
+
+    /**
+     * @throws ReflectionException
+     */
+    protected function setUp(): void
     {
         $this->classReader = new AnnotationReader(Country::class);
     }
-
-
 
     #region CACHING
 
@@ -34,10 +36,10 @@ class AnnotationReaderTests extends \PHPUnit\Framework\TestCase
         $path = AnnotationReader::cacheDir()."/.cache/".Country::class;
 
         $this->assertFileExists($path."/class.json");
-        //$this->assertFileExists($path."/method.getName.json");
-        //$this->assertFileExists($path."/method.getCode.json");
-        //$this->assertFileExists($path."/property.name.json");
-        //$this->assertFileExists($path."/property.code.json");
+        $this->assertFileExists($path."/method.getName.json");
+        $this->assertFileExists($path."/method.getCode.json");
+        $this->assertFileExists($path."/property.name.json");
+        $this->assertFileExists($path."/property.code.json");
     }
 
     public function testClearCache()

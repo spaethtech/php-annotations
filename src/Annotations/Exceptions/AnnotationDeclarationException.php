@@ -6,12 +6,12 @@ namespace MVQN\Annotations\Exceptions;
 use Exception;
 
 /**
- * Class AnnotationParsingException
+ * Class AnnotationDeclarationException
  *
  * @package MVQN\Annotations\Exceptions
  * @author Ryan Spaeth <rspaeth@mvqn.net
  * @final
  */
-final class AnnotationParsingException extends Exception
+final class AnnotationDeclarationException extends Exception
 {
 }

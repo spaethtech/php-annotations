@@ -1,70 +1,75 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Annotations;
 
+use MVQN\Annotations\Exceptions\AnnotationDeclarationException;
+
 /**
  * Class Annotation
+ *
+ * The base class for all built-in and user-defined Annotations.
  *
  * @package MVQN\Annotations
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 abstract class Annotation
 {
-    // =================================================================================================================
-    // CONSTANTS
-    // -----------------------------------------------------------------------------------------------------------------
+    #region CONSTANTS
 
     /** @const int Flag denoting that this annotation is not supported by any declarations. */
-    public const TARGET_NONE = 0;
+    public const TARGET_NONE        = 0;
     /** @const int Flag denoting that this annotation is supported in class declarations. */
-    public const TARGET_CLASS = 1;
+    public const TARGET_CLASS       = 1;
     /** @const int Flag denoting that this annotation is supported in method declarations. */
-    public const TARGET_METHOD = 2;
+    public const TARGET_METHOD      = 2;
     /** @const int Flag denoting that this annotation is supported in property declarations. */
-    public const TARGET_PROPERTY = 4;
+    public const TARGET_PROPERTY    = 4;
     /** @const int Flag denoting that this annotation is supported for all declarations. */
-    public const TARGET_ANY = 7;
+    public const TARGET_ANY         = 7;
 
-    // =================================================================================================================
-    // PROPERTIES
-    // -----------------------------------------------------------------------------------------------------------------
+    #endregion
+
+    #region PROPERTIES
 
     /** @var string $class The name of the class containing the current annotation. */
-    protected $class = Annotation::class;
+    protected $class    = Annotation::class;
 
     /** @var int $target The target of the current annotation, for example: class, method or property. */
-    protected $target = Annotation::TARGET_NONE;
+    protected $target   = Annotation::TARGET_NONE;
 
     /** @var string $name The name of the current annotation's method or property.  Use "$class" for class name. */
-    protected $name = "";
+    protected $name     = "";
 
     /** @var string $keyword The keyword of the current annotation. */
-    protected $keyword = "";
+    protected $keyword  = "";
 
     /** @var string $value The "raw" value of the current annotation. */
-    protected $value = "";
+    protected $value    = "";
 
-    // =================================================================================================================
-    // CONSTRUCTOR
-    // -----------------------------------------------------------------------------------------------------------------
+    #endregion
+
+    #region CONSTRUCTOR/DESTRUCTOR
 
     /**
+     * Annotation Constructor
+     *
      * @param int $target The target of the current annotation, for example: class, method or property.
      * @param string $class The name of the class containing the current annotation.
      * @param string $name The name of the current annotation's method or property.  Use "$class" for class name.
      * @param string $keyword A valid annotation keyword that immediately follows the "@" symbol.
      * @param string $value Any characters following the annotation keyword, recognized as the annotation value.
-     * @throws \Exception Throws an Exception, if this annotation class does not support the current annotation target.
+     *
+     * @throws AnnotationDeclarationException Thrown when this annotation class does not support the current target.
      */
     public function __construct(int $target, string $class, string $name, string $keyword, string $value)
     {
         // Set the class properties for this annotation...
-        $this->class = $class;
-        $this->target = $target;
-        $this->name = $name;
-        $this->keyword = $keyword;
-        $this->value = $value;
+        $this->class    = $class;
+        $this->target   = $target;
+        $this->name     = $name;
+        $this->keyword  = $keyword;
+        $this->value    = $value;
 
         // Determine the child class.
         $child = get_called_class();
@@ -95,10 +100,13 @@ abstract class Annotation
             }
 
             // AND throw an Exception!
-            throw new \Exception("[MVQN\Annotations\AnnotationReader] @{$this->keyword} is not supported on $message!");
+            throw new AnnotationDeclarationException("@{$this->keyword} is not supported on $message!");
         }
-
     }
+
+    #endregion
+
+    #region METHODS
 
     /**
      * @return array Returns an array of keyword => class associations from the included "Standard" Annotations.
@@ -130,9 +138,9 @@ abstract class Annotation
         return $annotations;
     }
 
-    // =================================================================================================================
-    // ABSTRACTS
-    // -----------------------------------------------------------------------------------------------------------------
+    #endregion
+
+    #region IMPLEMENTATIONS
 
     /**
      * @param array $existing Any existing annotations that were previously parsed from the same declaration.
@@ -140,4 +148,5 @@ abstract class Annotation
      */
     public abstract function parse(array $existing): array;
 
+    #endregion
 }

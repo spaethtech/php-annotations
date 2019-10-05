@@ -1,9 +1,9 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace Tests\MVQN\Annotations;
+namespace MVQN\Annotations;
 
-use MVQN\Annotations\Annotation;
+use Exception;
 use MVQN\Common\Arrays;
 use MVQN\Common\Patterns;
 
@@ -15,7 +15,7 @@ final class EndpointAnnotation extends Annotation
     /**
      * @param array $existing
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function parse(array $existing = []): array
     {
