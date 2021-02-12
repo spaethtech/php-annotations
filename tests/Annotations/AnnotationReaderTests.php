@@ -1,15 +1,15 @@
 <?php
 
-namespace MVQN\Annotations;
+namespace rspaeth\Annotations;
 
-use MVQN\Endpoints\Country;
+use rspaeth\Endpoints\Country;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
 /**
  * Class AnnotationReaderTests
  *
- * @package MVQN\Annotations
+ * @package rspaeth\Annotations
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 class AnnotationReaderTests extends TestCase
@@ -66,7 +66,7 @@ class AnnotationReaderTests extends TestCase
         echo "> Namespace : {$class->getNamespaceName()}\n";
         echo "\n";
 
-        $this->assertEquals("Tests\\MVQN\\Annotations\\Examples\\Country", $class->getName());
+        $this->assertEquals("Tests\\rspaeth\\Annotations\\Examples\\Country", $class->getName());
     }
 
     public function testGetReflectedMethods()
@@ -157,7 +157,7 @@ class AnnotationReaderTests extends TestCase
         echo "> $namespace\n";
         echo "\n";
 
-        $this->assertEquals("Tests\MVQN\Annotations\Examples", $namespace);
+        $this->assertEquals("Tests\rspaeth\Annotations\Examples", $namespace);
     }
 
     public function testFindAnnotationClass()
@@ -168,7 +168,7 @@ class AnnotationReaderTests extends TestCase
         echo "> $annotationClass\n";
         echo "\n";
 
-        $this->assertEquals("Tests\MVQN\Annotations\EndpointAnnotation", $annotationClass);
+        $this->assertEquals("Tests\rspaeth\Annotations\EndpointAnnotation", $annotationClass);
     }
 
     #endregion

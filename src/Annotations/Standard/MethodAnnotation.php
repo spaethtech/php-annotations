@@ -1,14 +1,14 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations\Standard;
+namespace rspaeth\Annotations\Standard;
 
-use MVQN\Annotations\Annotation;
+use rspaeth\Annotations\Annotation;
 
 /**
  * Class MethodAnnotation
  *
- * @package MVQN\Annotations\Standard
+ * @package rspaeth\Annotations\Standard
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @final
  */

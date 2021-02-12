@@ -1,11 +1,12 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations;
+namespace rspaeth\Annotations;
 
 use Exception;
-use MVQN\Common\Arrays;
-use MVQN\Common\Patterns;
+use rspaeth\Common\Arrays;
+use rspaeth\Common\Patterns;
 
 final class EndpointAnnotation extends Annotation
 {

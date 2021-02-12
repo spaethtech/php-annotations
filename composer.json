@@ -1,7 +1,6 @@
 {
-    "name": "mvqn/annotations",
-    "description": "A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in MVQN projects, but generic enough for anything!",
-    "minimum-stability": "stable",
+    "name": "rspaeth/annotations",
+    "description": "A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in my own projects!",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -16,19 +15,24 @@
         "ext-curl": "*",
         "ext-json": "*",
 
-        "mvqn/common": "~1"
+        "rspaeth/common": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8"
+        "phpunit/phpunit": "~9"
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\": "src/"
+            "rspaeth\\": "./src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MVQN\\": [ "tests/", "examples/" ]
+            "rspaeth\\": [ "./tests/", "./examples/" ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        { "type": "path", "url": "../*"}
+    ]
 }

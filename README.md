@@ -1,10 +1,10 @@
-# mvqn/annotations
-A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in MVQN projects, but generic enough for anything!
+# rspaeth/annotations
+A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in my own projects!
 
 ## Installation
 Install the latest version with
 ```bash
-composer require mvqn/annotations
+composer require rspaeth/annotations
 ```
 
 ## Basic Usage
@@ -26,12 +26,8 @@ COMING SOON
 ### Requirements
 COMING SOON!
 
-### Related Packages
-[ucrm-module-rest](https://github.com/mvqn/ucrm-module-rest)\
-Another plugin module used to simplify access to the UCRM REST API.
-
 ### Submitting bugs and feature requests
-Bugs and feature request are tracked on [Github](https://github.com/mvqn/annotations/issues)
+Bugs and feature request are tracked on [Github](https://github.com/rspaeth/annotations/issues)
 
 ### Author
 Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>

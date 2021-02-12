@@ -1,16 +1,16 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations;
+namespace rspaeth\Annotations;
 
-use MVQN\Annotations\Exceptions\AnnotationDeclarationException;
+use rspaeth\Annotations\Exceptions\AnnotationDeclarationException;
 
 /**
  * Class Annotation
  *
  * The base class for all built-in and user-defined Annotations.
  *
- * @package MVQN\Annotations
+ * @package rspaeth\Annotations
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 abstract class Annotation
@@ -131,7 +131,7 @@ abstract class Annotation
             $class = ucfirst($name)."Annotation";
 
             // Finally, append the association withe the fully qualified class name to the array.
-            $annotations[$name] = "MVQN\\Annotations\\Standard\\$class";
+            $annotations[$name] = "rspaeth\\Annotations\\Standard\\$class";
         }
 
         // And return the resulting array, even if it is empty!
