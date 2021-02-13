@@ -1,16 +1,16 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace rspaeth\Annotations;
+namespace MVQN\Annotations;
 
-use rspaeth\Annotations\Exceptions\AnnotationDeclarationException;
+use MVQN\Annotations\Exceptions\AnnotationDeclarationException;
 
 /**
  * Class Annotation
  *
  * The base class for all built-in and user-defined Annotations.
  *
- * @package rspaeth\Annotations
+ * @package MVQN\Annotations
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 abstract class Annotation

@@ -1,9 +1,9 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace rspaeth\Annotations;
+namespace MVQN\Annotations;
 
-use rspaeth\Common\Strings;
+use MVQN\Common\Strings;
 
 use DateTime;
 use Exception;
@@ -15,7 +15,7 @@ use ReflectionProperty;
 /**
  * Class AnnotationReader
  *
- * @package rspaeth\Annotations
+ * @package MVQN\Annotations
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @final
  */

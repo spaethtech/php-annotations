@@ -1,4 +1,4 @@
-# rspaeth/annotations
+# mvqn/annotations
 A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in my own projects!
 
 ## Installation
@@ -27,7 +27,7 @@ COMING SOON
 COMING SOON!
 
 ### Submitting bugs and feature requests
-Bugs and feature request are tracked on [Github](https://github.com/rspaeth/annotations/issues)
+Bugs and feature request are tracked on [Github](https://github.com/mvqn/annotations/issues)
 
 ### Author
 Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>
