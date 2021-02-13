@@ -131,7 +131,7 @@ abstract class Annotation
             $class = ucfirst($name)."Annotation";
 
             // Finally, append the association withe the fully qualified class name to the array.
-            $annotations[$name] = "rspaeth\\Annotations\\Standard\\$class";
+            $annotations[$name] = "MVQN\\Annotations\\Standard\\$class";
         }
 
         // And return the resulting array, even if it is empty!

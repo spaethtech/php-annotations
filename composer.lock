@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "564b7be819f01ab79953fbd750e2cc96",
+    "content-hash": "040da1d6295f0575be6b755ce3685b5e",
     "packages": [
         {
             "name": "mvqn/common",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/mvqn/common.git",
-                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98"
+                "reference": "73576ee5895e235b567d9c87a6b077e6ebcf92f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fcommon/repository/archive.zip?sha=82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
-                "reference": "82d3ddcfc49cfd1a0d3a2f721c49a753354dec98",
+                "url": "https://gitlab.com/api/v4/projects/mvqn%2Fcommon/repository/archive.zip?sha=73576ee5895e235b567d9c87a6b077e6ebcf92f6",
+                "reference": "73576ee5895e235b567d9c87a6b077e6ebcf92f6",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +40,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "rspaeth\\": "./src/"
+                    "MVQN\\": "./src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -57,7 +57,7 @@
             "support": {
                 "issues": "https://gitlab.com/api/v4/projects/14659799/issues"
             },
-            "time": "2021-02-13T02:24:35+00:00"
+            "time": "2021-02-13T03:53:13+00:00"
         }
     ],
     "packages-dev": [

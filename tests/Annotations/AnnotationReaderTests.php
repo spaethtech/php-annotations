@@ -66,7 +66,7 @@ class AnnotationReaderTests extends TestCase
         echo "> Namespace : {$class->getNamespaceName()}\n";
         echo "\n";
 
-        $this->assertEquals("Tests\\rspaeth\\Annotations\\Examples\\Country", $class->getName());
+        $this->assertEquals("Tests\\MVQN\\Annotations\\Examples\\Country", $class->getName());
     }
 
     public function testGetReflectedMethods()
