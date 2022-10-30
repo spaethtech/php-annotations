@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Endpoints;
+namespace SpaethTech\Endpoints;
 
-use MVQN\Annotations\EndpointAnnotation;
-use MVQN\Annotations\EndpointAnnotation as Endpoint;
+use SpaethTech\Annotations\EndpointAnnotation;
+use SpaethTech\Annotations\EndpointAnnotation as Endpoint;
 
 /**
  * Class Country
  *
- * @package Tests\MVQN\Annotations\Examples
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package Tests\SpaethTech\Annotations\Examples
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @final
  *
  * @other-endpoints { "get": "/countries", "getById": "/countries/:id" }
  * @Endpoint [ "get" => "/countries" ]
- * @\MVQN\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
+ * @\SpaethTech\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
  * @EndpointAnnotation [ "post" => "/countries" ]
  *
  * @method string|null getName()

@@ -1,5 +1,5 @@
-.idea/
 vendor/
 .env
+composer.lock
 
-tests/Annotations/.cache/
+tests/.cache/

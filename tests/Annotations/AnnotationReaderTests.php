@@ -1,16 +1,16 @@
 <?php
 
-namespace MVQN\Annotations;
+namespace SpaethTech\Annotations;
 
-use MVQN\Endpoints\Country;
+use SpaethTech\Endpoints\Country;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
 /**
  * Class AnnotationReaderTests
  *
- * @package MVQN\Annotations
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package SpaethTech\Annotations
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  */
 class AnnotationReaderTests extends TestCase
 {
@@ -66,7 +66,7 @@ class AnnotationReaderTests extends TestCase
         echo "> Namespace : {$class->getNamespaceName()}\n";
         echo "\n";
 
-        $this->assertEquals("Tests\\MVQN\\Annotations\\Examples\\Country", $class->getName());
+        $this->assertEquals("Tests\\SpaethTech\\Annotations\\Examples\\Country", $class->getName());
     }
 
     public function testGetReflectedMethods()
@@ -157,7 +157,7 @@ class AnnotationReaderTests extends TestCase
         echo "> $namespace\n";
         echo "\n";
 
-        $this->assertEquals("Tests\MVQN\Annotations\Examples", $namespace);
+        $this->assertEquals("Tests\SpaethTech\Annotations\Examples", $namespace);
     }
 
     public function testFindAnnotationClass()
@@ -168,7 +168,7 @@ class AnnotationReaderTests extends TestCase
         echo "> $annotationClass\n";
         echo "\n";
 
-        $this->assertEquals("Tests\MVQN\Annotations\EndpointAnnotation", $annotationClass);
+        $this->assertEquals("Tests\SpaethTech\Annotations\EndpointAnnotation", $annotationClass);
     }
 
     #endregion
@@ -182,7 +182,7 @@ class AnnotationReaderTests extends TestCase
         $annotations = $this->classReader->getClassAnnotations();
         print_r($annotations);
 
-        $this->assertEquals("rspaeth@mvqn.net", $annotations["author"]["email"]);
+        $this->assertEquals("rspaeth@spaethtech.com", $annotations["author"]["email"]);
     }
 
     public function testGetClassAnnotation()

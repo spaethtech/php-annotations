@@ -1,15 +1,15 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations\Standard;
+namespace SpaethTech\Annotations\Standard;
 
-use MVQN\Annotations\Annotation;
+use SpaethTech\Annotations\Annotation;
 
 /**
  * Class AuthorAnnotation
  *
- * @package MVQN\Annotations\Standard
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package SpaethTech\Annotations\Standard
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @final
  */
 final class AuthorAnnotation extends Annotation

@@ -1,9 +1,9 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations;
+namespace SpaethTech\Annotations;
 
-use MVQN\Common\Strings;
+use SpaethTech\Common\Strings;
 
 use DateTime;
 use Exception;
@@ -15,8 +15,8 @@ use ReflectionProperty;
 /**
  * Class AnnotationReader
  *
- * @package MVQN\Annotations
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @package SpaethTech\Annotations
+ * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @final
  */
 final class AnnotationReader
@@ -55,7 +55,7 @@ final class AnnotationReader
     /** @var string An optional directory to use for caching the annotation results for later lookup. */
     protected static $cachePath = null;
 
-    private const CACHE_FOLDER = ".cache/mvqn/annotations";
+    private const CACHE_FOLDER = ".cache/spaethtech/annotations";
 
     #endregion
 

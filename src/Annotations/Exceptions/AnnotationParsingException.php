@@ -1,15 +1,15 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations\Exceptions;
+namespace SpaethTech\Annotations\Exceptions;
 
 use Exception;
 
 /**
  * Class AnnotationParsingException
  *
- * @package MVQN\Annotations\Exceptions
- * @author Ryan Spaeth <rspaeth@mvqn.net
+ * @package SpaethTech\Annotations\Exceptions
+ * @author Ryan Spaeth <rspaeth@spaethtech.com
  * @final
  */
 final class AnnotationParsingException extends Exception

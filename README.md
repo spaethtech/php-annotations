@@ -1,4 +1,4 @@
-# mvqn/annotations
+# spaethtech/annotations
 A semi-complex PHP-Doc Annotation parsing library, specifically designed for use in my own projects!
 
 ## Installation
@@ -27,10 +27,10 @@ COMING SOON
 COMING SOON!
 
 ### Submitting bugs and feature requests
-Bugs and feature request are tracked on [Github](https://github.com/mvqn/annotations/issues)
+Bugs and feature request are tracked on [Github](https://github.com/spaethtech/annotations/issues)
 
 ### Author
-Ryan Spaeth <[rspaeth@mvqn.net](mailto:rspaeth@mvqn.net)>
+Ryan Spaeth <[rspaeth@spaethtech.com](mailto:rspaeth@spaethtech.com)>
 
 ### License
 This module is licensed under the MIT License - see the `LICENSE` file for details.

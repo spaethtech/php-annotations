@@ -2,11 +2,11 @@
 /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Annotations;
+namespace SpaethTech\Annotations;
 
 use Exception;
-use MVQN\Common\Arrays;
-use MVQN\Common\Patterns;
+use SpaethTech\Common\Arrays;
+use SpaethTech\Common\Patterns;
 
 final class EndpointAnnotation extends Annotation
 {
