@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class MethodAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class MethodAnnotation extends Annotation
@@ -29,17 +32,15 @@ final class MethodAnnotation extends Annotation
         $pattern = '/^\s*(static)*\s*([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
         //$pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
 
-        if(preg_match($pattern, $this->value, $matches))
-        {
+        if (preg_match($pattern, $this->value, $matches)) {
             /*
-            $param = [];
-            $param["types"] = explode("|", $matches[1]);
-            $param["name"] = $matches[2];
-            $param["args"] = $matches[3];
-            $param["description"] = $matches[4];
-
-            $existing["method"][$matches[2]] = $param;
-            */
+             $param = [];
+             $param["types"] = explode("|", $matches[1]);
+             $param["name"] = $matches[2];
+             $param["args"] = $matches[3];
+             $param["description"] = $matches[4];
+             $existing["method"][$matches[2]] = $param;
+             */
             $param = [];
             $param["static"] = ($matches[1] === "static");
             $param["types"] = explode("|", $matches[2]);

@@ -4,7 +4,7 @@
     bootstrap                   = "vendor/autoload.php"
     backupGlobals               = "false"
     backupStaticAttributes      = "false"
-    cacheResultFile             = "tests/.cache/.phpunit.result.cache"
+    cacheResultFile             = ".cache/.phpunit.result.cache"
     colors                      = "true"
     convertErrorsToExceptions   = "true"
     convertNoticesToExceptions  = "true"

@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class FinalAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class FinalAnnotation extends Annotation

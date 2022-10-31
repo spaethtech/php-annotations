@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class VarAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class VarAnnotation extends Annotation
@@ -28,8 +31,7 @@ final class VarAnnotation extends Annotation
     {
         $pattern = '/^([\w\|\[\]\_\\\]+)\s*(?:\$(\w+))?(.*)?$/';
 
-        if(preg_match($pattern, $this->value, $matches))
-        {
+        if (preg_match($pattern, $this->value, $matches)) {
             $existing["var"]["types"] = explode("|", $matches[1]);
             $existing["var"]["name"] = $matches[2] ?: $this->name;
             $existing["var"]["description"] = $matches[3];

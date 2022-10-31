@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class AuthorAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class AuthorAnnotation extends Annotation
@@ -28,13 +31,10 @@ final class AuthorAnnotation extends Annotation
     {
         $pattern = '/^(.+)\s(?:\<(.*)\>)?$/';
 
-        if(preg_match($pattern, $this->value, $matches))
-        {
+        if (preg_match($pattern, $this->value, $matches)) {
             $existing["author"]["name"] = $matches[1];
             $existing["author"]["email"] = $matches[2];
-        }
-        else
-        {
+        } else {
             $existing["author"]["name"] = $this->value;
         }
 

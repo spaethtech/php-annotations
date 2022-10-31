@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class ReturnAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class ReturnAnnotation extends Annotation
@@ -28,8 +31,7 @@ final class ReturnAnnotation extends Annotation
     {
         $pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)?$/';
 
-        if(preg_match($pattern, $this->value, $matches))
-        {
+        if (preg_match($pattern, $this->value, $matches)) {
             $existing["return"]["types"] = explode("|", $matches[1]);
             $existing["return"]["description"] = $matches[2];
         }

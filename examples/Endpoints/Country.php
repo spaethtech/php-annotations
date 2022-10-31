@@ -9,8 +9,9 @@ use SpaethTech\Annotations\EndpointAnnotation as Endpoint;
 /**
  * Class Country
  *
- * @package Tests\SpaethTech\Annotations\Examples
+ * @package SpaethTech\Annotations\Examples
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2020 - Spaeth Technologies Inc.
  * @final
  *
  * @other-endpoints { "get": "/countries", "getById": "/countries/:id" }
@@ -30,12 +31,12 @@ final class Country
     /**
      * @var string|null $name The country's name.
      */
-    protected $name;
+    protected ?string $name;
 
     /**
      * @var string|null The country's abbreviation.
      */
-    protected $code;
+    protected ?string $code;
 
     /**
      * @return string|null Returns the country's abbreviation.

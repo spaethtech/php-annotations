@@ -9,7 +9,10 @@ use SpaethTech\Annotations\Annotation;
  * Class ParamAnnotation
  *
  * @package SpaethTech\Annotations\Standard
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
+ * 
  * @final
  */
 final class ParamAnnotation extends Annotation
@@ -28,8 +31,7 @@ final class ParamAnnotation extends Annotation
     {
         $pattern = '/^([\w\|\[\]\_\\\]+)\s*(?:\$(\w+))?(.*)?$/';
 
-        if(preg_match($pattern, $this->value, $matches))
-        {
+        if (preg_match($pattern, $this->value, $matches)) {
             $param = [];
             $param["types"] = explode("|", $matches[1]);
             $param["name"] = $matches[2] ?: $this->name;

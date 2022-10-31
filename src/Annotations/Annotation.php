@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SpaethTech\Annotations;
 
 use SpaethTech\Annotations\Exceptions\AnnotationDeclarationException;
+use SpaethTech\Collections\Collectible;
 
 /**
  * Class Annotation
@@ -11,9 +12,11 @@ use SpaethTech\Annotations\Exceptions\AnnotationDeclarationException;
  * The base class for all built-in and user-defined Annotations.
  *
  * @package SpaethTech\Annotations
+ * 
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
  */
-abstract class Annotation
+abstract class Annotation extends Collectible
 {
 
 
