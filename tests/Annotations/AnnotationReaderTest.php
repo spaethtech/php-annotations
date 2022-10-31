@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace SpaethTech\Annotations;
 
 use SpaethTech\Endpoints\Country;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 
 /**
  * Class AnnotationReaderTests
@@ -12,34 +12,31 @@ use ReflectionException;
  * @package SpaethTech\Annotations
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  */
-class AnnotationReaderTests extends TestCase
+class AnnotationReaderTest extends TestCase
 {
     /** @var AnnotationReader  */
     protected $classReader = null;
 
-
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function setUp(): void
     {
         $this->classReader = new AnnotationReader(Country::class);
     }
 
-    #region CACHING
-
     public function testCache()
     {
-        AnnotationReader::cacheDir(__DIR__);
+        AnnotationReader::cacheDir(PROJECT_DIR . "/.cache");
         print_r($this->classReader->getAnnotations());
 
-        $path = AnnotationReader::cacheDir()."/.cache/".Country::class;
+        $path = AnnotationReader::cacheDirForClass(Country::class);
 
-        $this->assertFileExists($path."/class.json");
-        $this->assertFileExists($path."/method.getName.json");
-        $this->assertFileExists($path."/method.getCode.json");
-        $this->assertFileExists($path."/property.name.json");
-        $this->assertFileExists($path."/property.code.json");
+        $this->assertFileExists($path . "/class.json");
+        $this->assertFileExists($path . "/method.getName.json");
+        $this->assertFileExists($path . "/method.getCode.json");
+        $this->assertFileExists($path . "/property.name.json");
+        $this->assertFileExists($path . "/property.code.json");
     }
 
     public function testClearCache()
@@ -48,14 +45,14 @@ class AnnotationReaderTests extends TestCase
         //$this->classReader->cacheClear();
         $this->classReader->cacheClear([Country::class]);
 
-        $path = AnnotationReader::cacheDir()."/.cache/".Country::class;
+        $path = AnnotationReader::cacheDir() . "/.cache/" . Country::class;
 
-        $this->assertFileNotExists($path."/class.json");
+        $this->assertFileNotExists($path . "/class.json");
     }
 
-    #endregion
 
-    #region REFLECTION
+
+
 
     public function testGetReflectedClass()
     {
@@ -75,8 +72,7 @@ class AnnotationReaderTests extends TestCase
 
         echo "AnnotationReader::getReflectedMethods()\n";
 
-        foreach($methods as $method)
-        {
+        foreach ($methods as $method) {
             /** @var \ReflectionMethod $method */
             echo "> {$method->getName()}\n";
         }
@@ -105,8 +101,7 @@ class AnnotationReaderTests extends TestCase
 
         echo "AnnotationReader::getReflectedProperties()\n";
 
-        foreach($properties as $property)
-        {
+        foreach ($properties as $property) {
             /** @var \ReflectionProperty $property */
             echo "> {$property->getName()}\n";
         }
@@ -129,9 +124,9 @@ class AnnotationReaderTests extends TestCase
         $this->assertEquals("name", $property->getName());
     }
 
-    #endregion
 
-    #region NAMESPACES
+
+
 
     public function testGetUseStatements()
     {
@@ -139,8 +134,7 @@ class AnnotationReaderTests extends TestCase
 
         echo "AnnotationReader::getUseStatements()\n";
 
-        foreach($uses as $class => $namespace)
-        {
+        foreach ($uses as $class => $namespace) {
             echo "> $class => $namespace\n";
         }
 
@@ -171,9 +165,9 @@ class AnnotationReaderTests extends TestCase
         $this->assertEquals("Tests\SpaethTech\Annotations\EndpointAnnotation", $annotationClass);
     }
 
-    #endregion
 
-    #region ANNOTATIONS: Class
+
+
 
     public function testGetClassAnnotations()
     {
@@ -208,9 +202,9 @@ class AnnotationReaderTests extends TestCase
         $this->assertTrue($annotations);
     }
 
-    #endregion
 
-    #region ANNOTATIONS: Method
+
+
 
     public function testGetMethodAnnotations()
     {
@@ -249,9 +243,9 @@ class AnnotationReaderTests extends TestCase
         $this->assertTrue($annotations);
     }
 
-    #endregion
 
-    #region ANNOTATIONS: Property
+
+
 
     public function testGetPropertyAnnotations()
     {
@@ -292,6 +286,6 @@ class AnnotationReaderTests extends TestCase
         $this->assertTrue($annotations);
     }
 
-    #endregion
+
 
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SpaethTech\Annotations;
 
+use SpaethTech\Common\FileSystem;
 use SpaethTech\Common\Strings;
 
 use DateTime;
@@ -21,20 +22,20 @@ use ReflectionProperty;
  */
 final class AnnotationReader
 {
-    #region CONSTANTS
+
 
     /** @const int The default JSON options for use when caching the annotations. */
     private const CACHE_JSON_OPTIONS = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
 
     /** @const int Denote the annotation about to be parsed is on a class declaration. */
-    private const PARSE_STYLE_CLASS                 = 1;
+    private const PARSE_STYLE_CLASS = 1;
     /** @const int Denote the annotation about to be parsed is on a method declaration. */
-    private const PARSE_STYLE_METHOD                = 2;
+    private const PARSE_STYLE_METHOD = 2;
     /** @const int Denote the annotation about to be parsed is on a property declaration. */
-    private const PARSE_STYLE_PROPERTY              = 4;
+    private const PARSE_STYLE_PROPERTY = 4;
 
     // All patterns used for matching the annotations!
-    private const ANNOTATION_PATTERN                = '/(?:\*)(?:[\t ]*)?@([\w\_\-\\\\]+)(?:[\t ]*)?(.*)$/m';
+    private const ANNOTATION_PATTERN = '/(?:\*)(?:[\t ]*)?@([\w\_\-\\\\]+)(?:[\t ]*)?(.*)$/m';
     //private const ANNOTATION_PATTERN_JSON         = '/(\{.*\})/';
     //private const ANNOTATION_PATTERN_ARRAY        = '/(\[.+\])/';
     //private const ANNOTATION_PATTERN_EVAL         = '/\`(.*)\`/';
@@ -42,9 +43,9 @@ final class AnnotationReader
     //private const ANNOTATION_PATTERN_VAR_TYPE     = '/^([\w\|\[\]\_]+)\s*(?:\$(\w+))?(.*)?/';
     //private const ANNOTATION_PATTERN_PROPERTY     = '/^property-*(read|write|)\s+(\w+)\s+(\$\w+)\s+(.*)$/';
 
-    #endregion
 
-    #region PROPERTIES
+
+
 
     /** @var string The name of the class, for which any class, method or property annotations exist, to be parsed. */
     protected $class = "";
@@ -55,9 +56,9 @@ final class AnnotationReader
     /** @var string An optional directory to use for caching the annotation results for later lookup. */
     protected static $cachePath = null;
 
-    private const CACHE_FOLDER = ".cache/spaethtech/annotations";
+    private const CACHE_FOLDER = ".annotations";
 
-    #endregion
+
 
     // =================================================================================================================
     // CONSTRUCTOR/DESTRUCTOR
@@ -83,23 +84,40 @@ final class AnnotationReader
      */
     public static function cacheDir(string $path = null): ?string
     {
-        if($path !== null)
-        {
+        if ($path !== null) {
+            $desired = $path . DIRECTORY_SEPARATOR . self::CACHE_FOLDER;
             // Create the cache directory, if it does not exist...
-            if (!file_exists(dirname($path)))
-                mkdir(dirname($path), 0777, true);
+            //if (!file_exists(dirname($path)))
+            //    mkdir(dirname($path), 0777, true);
 
-            // Create a '.cache' directory inside the cache directory, if it does not exist...
-            if (!file_exists(dirname($path."/".self::CACHE_FOLDER."/")))
-                mkdir(dirname($path."/".self::CACHE_FOLDER."/"), 0777, true);
+            // Create the Annotations-specific directory inside the cache directory, if it does not exist...
+            //if (!file_exists(dirname($path . DIRECTORY_SEPARATOR . self::CACHE_FOLDER)))
+            //    mkdir(dirname($path . DIRECTORY_SEPARATOR . self::CACHE_FOLDER), 0777, true);
+
+            if (!file_exists($desired))
+                mkdir($desired, 0777, true);
 
             // Set the cache path, statically, for future use.
+            //self::$cachePath = $path . DIRECTORY_SEPARATOR . self::CACHE_FOLDER;
             self::$cachePath = $path;
         }
 
         // Return the cache path, even if it is NULL!
-        return self::$cachePath;
+        return FileSystem::path(self::$cachePath);
     }
+
+    public static function cacheDirForClass(string $class): ?string
+    {
+        if (self::$cachePath === null)
+            return null;
+
+        if (Strings::isNullOrEmpty($class))
+            return null;
+
+
+        return FileSystem::path(self::$cachePath . "/$class");
+    }
+
 
     /**
      * @param string $directory The current directory to remove.
@@ -107,16 +125,13 @@ final class AnnotationReader
      */
     private static function removeDirectoryRecursive(string $directory)
     {
-        if (is_dir($directory))
-        {
-            foreach (scandir($directory) as $object)
-            {
-                if ($object !== "." && $object !== "..")
-                {
-                    if (is_dir($directory."/".$object))
-                        self::removeDirectoryRecursive($directory."/".$object);
+        if (is_dir($directory)) {
+            foreach (scandir($directory) as $object) {
+                if ($object !== "." && $object !== "..") {
+                    if (is_dir($directory . "/" . $object))
+                        self::removeDirectoryRecursive($directory . "/" . $object);
                     else
-                        unlink($directory."/".$object);
+                        unlink($directory . "/" . $object);
                 }
             }
 
@@ -129,22 +144,19 @@ final class AnnotationReader
      */
     public static function cacheClear(array $classes = null): void
     {
-        if(self::$cachePath !== null)
-        {
+        if (self::$cachePath !== null) {
             // IF no specific classes have been provided
-            if($classes === null)
-            {
+            if ($classes === null) {
                 // Use a specific '.cache' directory as to avoid accidentally deleting undesired folders recursively.
-                self::removeDirectoryRecursive(self::$cachePath."/".self::CACHE_FOLDER."/");
+                self::removeDirectoryRecursive(self::$cachePath . "/" . self::CACHE_FOLDER . "/");
                 return;
             }
 
             // Loop through each provided class and attempt to delete them individually...
-            foreach($classes as $class)
-            {
-                $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/".$class;
+            foreach ($classes as $class) {
+                $cacheFile = self::$cachePath . "/" . self::CACHE_FOLDER . "/" . $class;
 
-                if(file_exists($cacheFile))
+                if (file_exists($cacheFile))
                     self::removeDirectoryRecursive($cacheFile);
             }
         }
@@ -153,22 +165,22 @@ final class AnnotationReader
 
     public static function hasMethodAnnotationsCached(string $class, string $method): bool
     {
-        if(self::$cachePath === null)
+        if (self::$cachePath === null)
             return false;
 
         // Generate the full filename and path for caching the current Annotation.
-        $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/$class/method.$method.json";
+        $cacheFile = self::$cachePath . "/" . self::CACHE_FOLDER . "/$class/method.$method.json";
 
         return file_exists($cacheFile);
     }
 
     public static function getMethodAnnotationsCached(string $class, string $method): ?array
     {
-        if(!self::hasMethodAnnotationsCached($class, $method))
+        if (!self::hasMethodAnnotationsCached($class, $method))
             return null;
 
         // Generate the full filename and path for caching the current Annotation.
-        $cacheFile = self::$cachePath."/".self::CACHE_FOLDER."/$class/method.$method.json";
+        $cacheFile = self::$cachePath . "/" . self::CACHE_FOLDER . "/$class/method.$method.json";
 
         return json_decode(file_get_contents($cacheFile), true);
     }
@@ -192,8 +204,7 @@ final class AnnotationReader
     private function parse(int $target, string $docBlock, string $name = ""): array
     {
         // Set appropriate filename for caching, based on the target type.
-        switch($target)
-        {
+        switch ($target) {
             //case Annotation::TARGET_NONE:
             case Annotation::TARGET_CLASS:
                 $targetString = "class";
@@ -211,17 +222,16 @@ final class AnnotationReader
         }
 
         // Generate the full filename and path for caching the current Annotation.
-        $cacheFile = self::$cachePath !== null ? self::$cachePath."/".self::CACHE_FOLDER."/{$this->class}/$targetString.json" : "";
+        $cacheFile = self::$cachePath !== null ? self::$cachePath . "/" . self::CACHE_FOLDER . "/{$this->class}/$targetString.json" : "";
 
         // IF using caching...
-        if(self::$cachePath !== null && file_exists($cacheFile))
-        {
+        if (self::$cachePath !== null && file_exists($cacheFile)) {
             // THEN simply return the cached results!
             return json_decode(file_get_contents($cacheFile), true);
         }
 
         // Build a collection of valid lines ONLY!  IF none exist, simply return empty-handed...
-        if(!preg_match_all(self::ANNOTATION_PATTERN, $docBlock, $matches))
+        if (!preg_match_all(self::ANNOTATION_PATTERN, $docBlock, $matches))
             return [];
 
         // Create a collection to store valid mappings.
@@ -231,30 +241,27 @@ final class AnnotationReader
         $standard = Annotation::getStandardAnnotations();
 
         // Loop through each matched annotation...
-        for($i = 0; $i < count($matches[0]); $i++)
-        {
+        for ($i = 0; $i < count($matches[0]); $i++) {
             $key = $matches[1][$i];
             $value = trim($matches[2][$i]); // Remove trailing '\r' that we cannot seem to RegEx out of there!
 
             // Check for an Annotation class name...
-            if(Strings::startsWithUpper($key) || Strings::contains($key, "\\") || array_key_exists($key, $standard))
-            {
-                if(array_key_exists($key, $standard))
+            if (Strings::startsWithUpper($key) || Strings::contains($key, "\\") || array_key_exists($key, $standard)) {
+                if (array_key_exists($key, $standard))
                     $annotationClass = $standard[$key];
                 else
                     $annotationClass = $this->findAnnotationClass($key);
 
-                if($annotationClass !== null)
-                {
-                    $occurrences = defined("$annotationClass::SUPPORTED_DUPLICATES") ?
+                if ($annotationClass !== null) {
+                    $occurrences = defined("$annotationClass::SUPPORTED_DUPLICATES") ? 
                         $annotationClass::SUPPORTED_DUPLICATES : true;
 
-                    if(!$occurrences && array_key_exists($key, $params))
-                        throw new Exception("An annotation for '@$key' has already been declared in the set of ".
-                            "annotations for '$annotationClass".($name !== "" ? "::$name" : "")."'!");
+                    if (!$occurrences && array_key_exists($key, $params))
+                        throw new Exception("An annotation for '@$key' has already been declared in the set of " .
+                            "annotations for '$annotationClass" . ($name !== "" ? "::$name" : "") . "'!");
 
                     /** @var Annotation $instance */
-                    $instance = new $annotationClass($target, /* $annotationClass */ $this->class, $name, $key, $value);
+                    $instance = new $annotationClass($target, /* $annotationClass */$this->class, $name, $key, $value);
                     $params = $instance->parse($params); //, $annotationName);
                     continue;
                 }
@@ -266,71 +273,58 @@ final class AnnotationReader
             $count = count(array_keys($matches[1], $key, true));
 
             /*
-            // Handle JSON objects!
-            if(preg_match(self::ANNOTATION_PATTERN_JSON, $value, $match))
-            {
-                $value = json_decode($value, true);
-            }
-            else
-                // Handle Array objects!
-                if(preg_match(self::ANNOTATION_PATTERN_ARRAY, $value, $match))
-                {
-                    // TODO: Determine best way to handle the cases where a property has a type of Type[]!
-
-                    // For now, we just remove the [] at the end of the type name...
-                    if(preg_match(self::ANNOTATION_PATTERN_ARRAY_NAMED, $value, $named_match))
-                        $value = str_replace("[]", "", $value);
-
-                    $value = eval("return ".$value.";");
-                }
-                else
-                    // Handle Eval objects!
-                    if(preg_match(self::ANNOTATION_PATTERN_EVAL, $value, $match))
-                    {
-                        // TODO: Determine the best way to handle this scenario!
-                        //$value = eval("return ".$value.";");
-                        echo "";
-                    }
-
-            // Cleanup both arrays and JSON values, removing leading and trailing whitespace.
-            $value = is_array($value) ? array_map("trim", $value) : trim($value);
-            */
+             // Handle JSON objects!
+             if(preg_match(self::ANNOTATION_PATTERN_JSON, $value, $match))
+             {
+             $value = json_decode($value, true);
+             }
+             else
+             // Handle Array objects!
+             if(preg_match(self::ANNOTATION_PATTERN_ARRAY, $value, $match))
+             {
+             // TODO: Determine best way to handle the cases where a property has a type of Type[]!
+             // For now, we just remove the [] at the end of the type name...
+             if(preg_match(self::ANNOTATION_PATTERN_ARRAY_NAMED, $value, $named_match))
+             $value = str_replace("[]", "", $value);
+             $value = eval("return ".$value.";");
+             }
+             else
+             // Handle Eval objects!
+             if(preg_match(self::ANNOTATION_PATTERN_EVAL, $value, $match))
+             {
+             // TODO: Determine the best way to handle this scenario!
+             //$value = eval("return ".$value.";");
+             echo "";
+             }
+             // Cleanup both arrays and JSON values, removing leading and trailing whitespace.
+             $value = is_array($value) ? array_map("trim", $value) : trim($value);
+             */
 
             // IF there is more than one occurrence of this @<keyword>...
-            if($count > 1)
-            {
+            if ($count > 1) {
                 // THEN check to see if this is the first occurrence...
-                if(!array_key_exists($key, $params))
-                {
+                if (!array_key_exists($key, $params)) {
                     // AND append this value directly to the array, if it is!
                     $params[$key] = $value;
-                }
-                else
-                {
+                } else {
                     // OTHERWISE, append this value to the existing array!
 
                     // IF the current value is NOT an array...
-                    if(!is_array($value))
-                    {
+                    if (!is_array($value)) {
                         // THEN, assume the other values under this @<param> are also NOT arrays...
-                        if(!is_array($params[$key]))
-                        {
+                        if (!is_array($params[$key])) {
                             $oldValue = $params[$key];
                             $params[$key] = [];
                             $params[$key][] = $oldValue;
                         }
 
                         $params[$key][] = $value;
-                    }
-                    else
-                    {
+                    } else {
                         $params[$key] = array_merge($params[$key], $value);
                     }
 
                 }
-            }
-            else
-            {
+            } else {
                 // OTHERWISE, this is the only occurrence, simply append it to the array!
                 $params[$key] = $value;
             }
@@ -338,8 +332,7 @@ final class AnnotationReader
         }
 
         // Cache the results, if using caching...
-        if(self::$cachePath !== null)
-        {
+        if (self::$cachePath !== null) {
             if (!file_exists(dirname($cacheFile)))
                 mkdir(dirname($cacheFile), 0777, true);
 
@@ -364,39 +357,33 @@ final class AnnotationReader
         $building = false;
         $current = "";
 
-        foreach($tokens as $token)
-        {
+        foreach ($tokens as $token) {
             // Check to see if we've encountered the class declaration...
-            if(is_array($token) && $token[0] === T_CLASS)
+            if (is_array($token) && $token[0] === T_CLASS)
                 // And break if we have, as we do not want to search beyond here!
                 break;
 
             // Check to see if the current token is the "use" statement...
-            if(is_array($token) && $token[0] === T_USE)
-            {
+            if (is_array($token) && $token[0] === T_USE) {
                 // And if so, start building the namespace.
                 $building = true;
                 $current = "";
             }
 
             // Keep appending tokens as long as they are part of the 'use' statement...
-            if(is_array($token) && $token[0] !== T_USE && $building)
+            if (is_array($token) && $token[0] !== T_USE && $building)
                 $current .= $token[1];
 
             // Check to see if a semicolon is reached while building the 'use' statement...
-            if(!is_array($token) && $token === ";" && $building)
-            {
+            if (!is_array($token) && $token === ";" && $building) {
                 $building = false;
 
                 // Handle situations where 'as' is used...
-                if(Strings::contains($current, " as "))
-                {
+                if (Strings::contains($current, " as ")) {
                     $parts = array_map("trim", explode(" as ", $current));
                     // Add the current class => namespace mapping to the collection.
                     $uses[$parts[1]] = $parts[0];
-                }
-                else
-                {
+                } else {
                     $parts = array_map("trim", explode("\\", $current));
                     // Add the current class => namespace mapping to the collection.
                     $uses[$parts[count($parts) - 1]] = trim($current);
@@ -429,33 +416,29 @@ final class AnnotationReader
         $annotationClass = "";
 
         // Handle fully qualified class names!
-        if(Strings::startsWith($class, "\\"))
-        {
+        if (Strings::startsWith($class, "\\")) {
             $annotationClass = $class;
         }
 
         // Handle exact class name matches, including aliases classes...
-        if(array_key_exists($class, $this->uses))
+        if (array_key_exists($class, $this->uses))
             $annotationClass = $this->uses[$class];
 
         // Handle fully qualified class names...
-        if($annotationClass === "" && in_array($class, $this->uses))
-        {
+        if ($annotationClass === "" && in_array($class, $this->uses)) {
             $key = array_search($class, $this->uses);
             $annotationClass = $this->uses[$key];
         }
 
         // Handle class names living in the same namespace...
-        if($annotationClass === "") // && class_exists($namespace."\\".$class))
-            $annotationClass = $this->getNamespace()."\\".$class;
+        if ($annotationClass === "") // && class_exists($namespace."\\".$class))
+            $annotationClass = $this->getNamespace() . "\\" . $class;
 
         // Make certain the class exists before continuing...
-        if ($annotationClass !== "" && class_exists($annotationClass))
-        {
+        if ($annotationClass !== "" && class_exists($annotationClass)) {
             // IF the current annotation class does not extend Annotation...
             /** @noinspection PhpStatementHasEmptyBodyInspection */
-            if (!is_subclass_of($annotationClass, Annotation::class, true))
-            {
+            if (!is_subclass_of($annotationClass, Annotation::class, true)) {
                 // THEN, assume it is handled by another library and return NULL!
                 //return null;
             }
@@ -465,10 +448,9 @@ final class AnnotationReader
         }
 
         // IF we have an annotation class name, but the class was not found...
-        if ($annotationClass !== "" && class_exists($annotationClass."Annotation") && !Strings::contains($annotationClass, "\\"))
-        {
+        if ($annotationClass !== "" && class_exists($annotationClass . "Annotation") && !Strings::contains($annotationClass, "\\")) {
             // THEN, try again with the 'Annotation' suffix!
-            return $this->findAnnotationClass($class."Annotation");
+            return $this->findAnnotationClass($class . "Annotation");
         }
 
         // This is not a known class, assume a user-defined annotation and return NULL!
@@ -561,14 +543,12 @@ final class AnnotationReader
      */
     public function getClassAnnotations(): array
     {
-        if(AnnotationReader::cacheDir() !== null)
-        {
-            $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
+        if (AnnotationReader::cacheDir() !== null) {
+            $path = AnnotationReader::cacheDir() . "/" . self::CACHE_FOLDER . "/" . $this->class;
             $file = "class.json";
 
-            if(file_exists($path."/".$file))
-            {
-                return json_decode(file_get_contents($path."/".$file), true);
+            if (file_exists($path . "/" . $file)) {
+                return json_decode(file_get_contents($path . "/" . $file), true);
             }
         }
 
@@ -581,7 +561,8 @@ final class AnnotationReader
      * @return mixed Returns the value of the specified annotation for the current class.
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getClassAnnotation(string $keyword)//: array
+    public function getClassAnnotation(string $keyword) //: array
+
     {
         $params = $this->getClassAnnotations();
         return array_key_exists($keyword, $params) ? $params[$keyword] : [];
@@ -598,8 +579,8 @@ final class AnnotationReader
 
         $matches = [];
 
-        foreach($params as $key => $value)
-            if(preg_match($pattern, $key))
+        foreach ($params as $key => $value)
+            if (preg_match($pattern, $key))
                 $matches[$key] = $value;
 
         return $matches;
@@ -629,12 +610,10 @@ final class AnnotationReader
      *
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getMethodAnnotations(string ...$methods): array
+    public function getMethodAnnotations(string...$methods): array
     {
-        if($methods === [])
-        {
-            foreach($this->getReflectedMethods() as $reflectedMethod)
-            {
+        if ($methods === []) {
+            foreach ($this->getReflectedMethods() as $reflectedMethod) {
                 /** @var ReflectionMethod $reflectedMethod */
                 $methods[] = $reflectedMethod->getName();
             }
@@ -642,30 +621,25 @@ final class AnnotationReader
 
         $annotations = [];
 
-        foreach($methods as $method)
-        {
+        foreach ($methods as $method) {
             $missing = true;
 
             // IF caching is enabled...
-            if(AnnotationReader::cacheDir() !== null)
-            {
-                $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
-                $file = $path."/method.$method.json";
+            if (AnnotationReader::cacheDir() !== null) {
+                $path = AnnotationReader::cacheDir() . "/" . self::CACHE_FOLDER . "/" . $this->class;
+                $file = $path . "/method.$method.json";
 
-                if(file_exists($file))
-                {
+                if (file_exists($file)) {
                     $params = json_decode(file_get_contents($file), true);
 
-                    if(json_last_error() === JSON_ERROR_NONE)
-                    {
+                    if (json_last_error() === JSON_ERROR_NONE) {
                         $missing = false;
                         $annotations[$method] = $params;
                     }
                 }
             }
 
-            if($missing)
-            {
+            if ($missing) {
                 $docBlock = $this->getReflectedMethod($method)->getDocComment();
                 $params = $docBlock ? $this->parse(self::PARSE_STYLE_METHOD, $docBlock, $method) : [];
 
@@ -673,8 +647,7 @@ final class AnnotationReader
             }
         }
 
-        if(count($methods) === 1)
-        {
+        if (count($methods) === 1) {
             return $annotations[$methods[0]];
         }
 
@@ -687,7 +660,8 @@ final class AnnotationReader
      * @return mixed Returns the value of the annotation for the given method of the current class.
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getMethodAnnotation(string $method, string $keyword)//: array
+    public function getMethodAnnotation(string $method, string $keyword) //: array
+
     {
         $annotations = $this->getMethodAnnotations($method);
         return array_key_exists($keyword, $annotations) ? $annotations[$keyword] : [];
@@ -705,8 +679,8 @@ final class AnnotationReader
         //$matches = preg_grep($pattern, $annotations);
 
         $matches = [];
-        foreach($annotations as $key => $value)
-            if(preg_match($pattern, $key))
+        foreach ($annotations as $key => $value)
+            if (preg_match($pattern, $key))
                 $matches[$key] = $value;
 
         return $matches;
@@ -737,12 +711,10 @@ final class AnnotationReader
      *
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getPropertyAnnotations(string ...$properties): array
+    public function getPropertyAnnotations(string...$properties): array
     {
-        if($properties === [])
-        {
-            foreach($this->getReflectedProperties() as $reflectedProperty)
-            {
+        if ($properties === []) {
+            foreach ($this->getReflectedProperties() as $reflectedProperty) {
                 /** @var ReflectionProperty $reflectedProperty */
                 $properties[] = $reflectedProperty->getName();
             }
@@ -750,30 +722,25 @@ final class AnnotationReader
 
         $annotations = [];
 
-        foreach($properties as $property)
-        {
+        foreach ($properties as $property) {
             $missing = true;
 
             // IF caching is enabled...
-            if(AnnotationReader::cacheDir() !== null)
-            {
-                $path = AnnotationReader::cacheDir()."/".self::CACHE_FOLDER."/".$this->class;
-                $file = $path."/property.$property.json";
+            if (AnnotationReader::cacheDir() !== null) {
+                $path = AnnotationReader::cacheDir() . "/" . self::CACHE_FOLDER . "/" . $this->class;
+                $file = $path . "/property.$property.json";
 
-                if(file_exists($file))
-                {
+                if (file_exists($file)) {
                     $params = json_decode(file_get_contents($file), true);
 
-                    if(json_last_error() === JSON_ERROR_NONE)
-                    {
+                    if (json_last_error() === JSON_ERROR_NONE) {
                         $missing = false;
                         $annotations[$property] = $params;
                     }
                 }
             }
 
-            if($missing)
-            {
+            if ($missing) {
                 $docBlock = $this->getReflectedProperty($property)->getDocComment();
                 $params = $docBlock ? $this->parse(self::PARSE_STYLE_PROPERTY, $docBlock, $property) : [];
 
@@ -782,8 +749,7 @@ final class AnnotationReader
         }
 
         /** @noinspection PhpStatementHasEmptyBodyInspection */
-        if(count($properties) === 1)
-        {
+        if (count($properties) === 1) {
             //return $annotations[$properties[0]]; // Causing problems with single property classes!
         }
 
@@ -796,7 +762,8 @@ final class AnnotationReader
      * @return mixed Returns the value of the annotation for the give property of the current class.
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
      */
-    public function getPropertyAnnotation(string $property, string $keyword)//: array
+    public function getPropertyAnnotation(string $property, string $keyword) //: array
+
     {
         $params = $this->getPropertyAnnotations($property);
         return array_key_exists($keyword, $params) ? $params[$keyword] : [];
@@ -814,8 +781,8 @@ final class AnnotationReader
         //$matches = preg_grep($pattern, $params);
 
         $matches = [];
-        foreach($annotations as $key => $value)
-            if(preg_match($pattern, $key))
+        foreach ($annotations as $key => $value)
+            if (preg_match($pattern, $key))
                 $matches[$key] = $value;
 
         return $matches;

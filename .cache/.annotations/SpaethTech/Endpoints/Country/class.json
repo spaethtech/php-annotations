@@ -1,0 +1,27 @@
+{
+    "package": "Tests\\SpaethTech\\Annotations\\Examples",
+    "author": {
+        "name": "Ryan Spaeth",
+        "email": "rspaeth@spaethtech.com"
+    },
+    "final": "",
+    "other-endpoints": "{ \"get\": \"/countries\", \"getById\": \"/countries/:id\" }",
+    "endpoint": {
+        "get": "/countries",
+        "getById": "/countries/:id",
+        "post": "/countries"
+    },
+    "method": {
+        "getName": {
+            "static": false,
+            "types": [
+                "string",
+                "null"
+            ],
+            "name": "getName",
+            "args": "",
+            "description": ""
+        }
+    },
+    "_cached": "2022-10-31T17:26:00+00:00"
+}

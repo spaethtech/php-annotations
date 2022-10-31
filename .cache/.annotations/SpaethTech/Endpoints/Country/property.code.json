@@ -1,0 +1,11 @@
+{
+    "var": {
+        "types": [
+            "string",
+            "null"
+        ],
+        "name": "code",
+        "description": "The country's abbreviation."
+    },
+    "_cached": "2022-10-31T17:26:00+00:00"
+}

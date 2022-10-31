@@ -1,0 +1,10 @@
+{
+    "return": {
+        "types": [
+            "string",
+            "null"
+        ],
+        "description": "Returns the country's abbreviation."
+    },
+    "_cached": "2022-10-31T17:26:00+00:00"
+}

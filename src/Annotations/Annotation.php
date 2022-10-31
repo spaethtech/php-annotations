@@ -15,41 +15,41 @@ use SpaethTech\Annotations\Exceptions\AnnotationDeclarationException;
  */
 abstract class Annotation
 {
-    #region CONSTANTS
+
 
     /** @const int Flag denoting that this annotation is not supported by any declarations. */
-    public const TARGET_NONE        = 0;
+    public const TARGET_NONE = 0;
     /** @const int Flag denoting that this annotation is supported in class declarations. */
-    public const TARGET_CLASS       = 1;
+    public const TARGET_CLASS = 1;
     /** @const int Flag denoting that this annotation is supported in method declarations. */
-    public const TARGET_METHOD      = 2;
+    public const TARGET_METHOD = 2;
     /** @const int Flag denoting that this annotation is supported in property declarations. */
-    public const TARGET_PROPERTY    = 4;
+    public const TARGET_PROPERTY = 4;
     /** @const int Flag denoting that this annotation is supported for all declarations. */
-    public const TARGET_ANY         = 7;
+    public const TARGET_ANY = 7;
 
-    #endregion
 
-    #region PROPERTIES
+
+
 
     /** @var string $class The name of the class containing the current annotation. */
-    protected $class    = Annotation::class;
+    protected $class = Annotation::class;
 
     /** @var int $target The target of the current annotation, for example: class, method or property. */
-    protected $target   = Annotation::TARGET_NONE;
+    protected $target = Annotation::TARGET_NONE;
 
     /** @var string $name The name of the current annotation's method or property.  Use "$class" for class name. */
-    protected $name     = "";
+    protected $name = "";
 
     /** @var string $keyword The keyword of the current annotation. */
-    protected $keyword  = "";
+    protected $keyword = "";
 
     /** @var string $value The "raw" value of the current annotation. */
-    protected $value    = "";
+    protected $value = "";
 
-    #endregion
 
-    #region CONSTRUCTOR/DESTRUCTOR
+
+
 
     /**
      * Annotation Constructor
@@ -65,11 +65,11 @@ abstract class Annotation
     public function __construct(int $target, string $class, string $name, string $keyword, string $value)
     {
         // Set the class properties for this annotation...
-        $this->class    = $class;
-        $this->target   = $target;
-        $this->name     = $name;
-        $this->keyword  = $keyword;
-        $this->value    = $value;
+        $this->class = $class;
+        $this->target = $target;
+        $this->name = $name;
+        $this->keyword = $keyword;
+        $this->value = $value;
 
         // Determine the child class.
         $child = get_called_class();
@@ -78,11 +78,9 @@ abstract class Annotation
         $supports = defined("$child::SUPPORTED_TARGETS") ? $child::SUPPORTED_TARGETS : Annotation::TARGET_ANY;
 
         // IF this annotation class does not support the current target...
-        if(!(($supports & $target) === $target))
-        {
+        if (!(($supports& $target) === $target)) {
             // THEN, set an informative error message...
-            switch($target)
-            {
+            switch ($target) {
                 //case Annotation::TARGET_NONE:
                 case Annotation::TARGET_CLASS:
                     $message = "classes";
@@ -104,9 +102,9 @@ abstract class Annotation
         }
     }
 
-    #endregion
 
-    #region METHODS
+
+
 
     /**
      * @return array Returns an array of keyword => class associations from the included "Standard" Annotations.
@@ -117,10 +115,9 @@ abstract class Annotation
         $annotations = [];
 
         // Loop through each file in the included "Standard" directory...
-        foreach(scandir(__DIR__ . "/./Standard/") as $annotation)
-        {
+        foreach (scandir(__DIR__ . "/./Standard/") as $annotation) {
             // IF the file is one of the special "." or ".." files, THEN simply ignore and continue!
-            if($annotation === "." || $annotation === "..")
+            if ($annotation === "." || $annotation === "..")
                 continue;
 
             // Convert the file name to the appropriate annotation keyword
@@ -128,7 +125,7 @@ abstract class Annotation
             $name = lcfirst($name);
 
             // And then generate the formal class name.
-            $class = ucfirst($name)."Annotation";
+            $class = ucfirst($name) . "Annotation";
 
             // Finally, append the association withe the fully qualified class name to the array.
             $annotations[$name] = "SpaethTech\\Annotations\\Standard\\$class";
@@ -138,9 +135,9 @@ abstract class Annotation
         return $annotations;
     }
 
-    #endregion
 
-    #region IMPLEMENTATIONS
+
+
 
     /**
      * @param array $existing Any existing annotations that were previously parsed from the same declaration.
@@ -148,5 +145,5 @@ abstract class Annotation
      */
     public abstract function parse(array $existing): array;
 
-    #endregion
+
 }
