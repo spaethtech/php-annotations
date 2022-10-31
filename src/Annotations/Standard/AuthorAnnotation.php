@@ -29,7 +29,7 @@ final class AuthorAnnotation extends Annotation
      */
     public function parse(array $existing = []): array
     {
-        $pattern = '/^(.+)\s(?:\<(.*)\>)?$/';
+        $pattern = '/^(.+)\s(?:<(.*)>)?$/';
 
         if (preg_match($pattern, $this->value, $matches)) {
             $existing["author"]["name"] = $matches[1];

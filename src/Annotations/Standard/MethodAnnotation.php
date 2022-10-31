@@ -29,7 +29,7 @@ final class MethodAnnotation extends Annotation
      */
     public function parse(array $existing = []): array
     {
-        $pattern = '/^\s*(static)*\s*([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
+        $pattern = '/^\s*(static)*\s*([\w|\[\]_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
         //$pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)\((.*)\)\s*(.*)$/';
 
         if (preg_match($pattern, $this->value, $matches)) {

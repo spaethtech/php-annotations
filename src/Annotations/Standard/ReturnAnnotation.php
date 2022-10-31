@@ -29,7 +29,7 @@ final class ReturnAnnotation extends Annotation
      */
     public function parse(array $existing = []): array
     {
-        $pattern = '/^([\w\|\[\]\_\\\]+)\s*(.*)?$/';
+        $pattern = '/^([\w|\[\]_\\\]+)\s*(.*)?$/';
 
         if (preg_match($pattern, $this->value, $matches)) {
             $existing["return"]["types"] = explode("|", $matches[1]);

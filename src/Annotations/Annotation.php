@@ -36,19 +36,19 @@ abstract class Annotation extends Collectible
 
 
     /** @var string $class The name of the class containing the current annotation. */
-    protected $class = Annotation::class;
+    protected string $class = Annotation::class;
 
     /** @var int $target The target of the current annotation, for example: class, method or property. */
-    protected $target = Annotation::TARGET_NONE;
+    protected int $target = Annotation::TARGET_NONE;
 
     /** @var string $name The name of the current annotation's method or property.  Use "$class" for class name. */
-    protected $name = "";
+    protected string $name = "";
 
     /** @var string $keyword The keyword of the current annotation. */
-    protected $keyword = "";
+    protected string $keyword = "";
 
     /** @var string $value The "raw" value of the current annotation. */
-    protected $value = "";
+    protected string $value = "";
 
 
 
@@ -101,7 +101,7 @@ abstract class Annotation extends Collectible
             }
 
             // AND throw an Exception!
-            throw new AnnotationDeclarationException("@{$this->keyword} is not supported on $message!");
+            throw new AnnotationDeclarationException("@$this->keyword is not supported on $message!");
         }
     }
 
@@ -130,7 +130,7 @@ abstract class Annotation extends Collectible
             // And then generate the formal class name.
             $class = ucfirst($name) . "Annotation";
 
-            // Finally, append the association withe the fully qualified class name to the array.
+            // Finally, append the association with the fully qualified class name to the array.
             $annotations[$name] = "SpaethTech\\Annotations\\Standard\\$class";
         }
 

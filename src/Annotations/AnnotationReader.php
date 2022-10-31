@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace SpaethTech\Annotations;
 
-use SpaethTech\Collections\Collection;
 use SpaethTech\Common\FileSystem;
 use SpaethTech\Common\Strings;
 
@@ -377,7 +376,7 @@ final class AnnotationReader
                 $current .= $token[1];
 
             // Check to see if a semicolon is reached while building the 'use' statement...
-            if (!is_array($token) && $token === ";" && $building) {
+            if ($token === ";" && $building) {
                 $building = false;
 
                 // Handle situations where 'as' is used...
@@ -473,7 +472,7 @@ final class AnnotationReader
     }
 
     /**
-     * Gets all methods of the current class, optionally filtering by bitwise disjunction of any of the following:
+     * Gets all methods of the current class, optionally filtering by bitwise disjunction of the following:
      * - ReflectionMethod::IS_STATIC
      * - ReflectionMethod::IS_PUBLIC
      * - ReflectionMethod::IS_PROTECTED
