@@ -4,69 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0683d52c29a6c9420647eaa70ea465ff",
+    "content-hash": "0b6c7d7a133a5118ace427eb3e8d62fd",
     "packages": [
-        {
-            "name": "spaethtech/collections",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spaethtech/collections.git",
-                "reference": "524d61dd977323eb68828ce031952012ec45b6b2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spaethtech/collections/zipball/524d61dd977323eb68828ce031952012ec45b6b2",
-                "reference": "524d61dd977323eb68828ce031952012ec45b6b2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4"
-            },
-            "require-dev": {
-                "onspli/phpdoc-markdown": "0.3.3"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "SpaethTech\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Spaeth",
-                    "email": "rspaeth@spaethtech.com"
-                }
-            ],
-            "description": "A robust library for handling Collections.",
-            "homepage": "https://github.com/spaethtech/collections.git",
-            "keywords": [
-                "collections"
-            ],
-            "support": {
-                "issues": "https://github.com/spaethtech/collections/issues",
-                "source": "https://github.com/spaethtech/collections/tree/master"
-            },
-            "time": "2022-10-31T22:06:43+00:00"
-        },
         {
             "name": "spaethtech/common",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spaethtech/common.git",
-                "reference": "f41962448692383538fa9f60b62e6b8eb23e21d7"
+                "reference": "1ccf8848f6857463bdcf63ee4f4cef27e9f1b757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spaethtech/common/zipball/f41962448692383538fa9f60b62e6b8eb23e21d7",
-                "reference": "f41962448692383538fa9f60b62e6b8eb23e21d7",
+                "url": "https://api.github.com/repos/spaethtech/common/zipball/1ccf8848f6857463bdcf63ee4f4cef27e9f1b757",
+                "reference": "1ccf8848f6857463bdcf63ee4f4cef27e9f1b757",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +61,7 @@
                 "issues": "https://github.com/spaethtech/common/issues",
                 "source": "https://github.com/spaethtech/common/tree/master"
             },
-            "time": "2022-10-31T19:09:10+00:00"
+            "time": "2022-11-01T00:04:25+00:00"
         }
     ],
     "packages-dev": [
@@ -3904,8 +3855,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "spaethtech/common": 20,
-        "spaethtech/collections": 20
+        "spaethtech/common": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

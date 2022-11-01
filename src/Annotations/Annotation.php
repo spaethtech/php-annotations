@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace SpaethTech\Annotations;
 
 use SpaethTech\Annotations\Exceptions\AnnotationDeclarationException;
-use SpaethTech\Collections\Collectible;
 
 /**
  * Class Annotation
@@ -16,7 +15,7 @@ use SpaethTech\Collections\Collectible;
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @copyright 2022, Spaeth Technologies Inc.
  */
-abstract class Annotation extends Collectible
+abstract class Annotation
 {
 
 
@@ -47,8 +46,8 @@ abstract class Annotation extends Collectible
     /** @var string $keyword The keyword of the current annotation. */
     protected string $keyword = "";
 
-    /** @var string $value The "raw" value of the current annotation. */
-    protected string $value = "";
+    /** @var mixed $value The "raw" value of the current annotation. */
+    protected $value = "";
 
 
 

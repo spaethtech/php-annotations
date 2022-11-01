@@ -39,9 +39,10 @@ final class Country
     protected ?string $code;
 
     /**
+     * @param string $test
      * @return string|null Returns the country's abbreviation.
      */
-    public function getCode(): ?string
+    public function getCode(string $test): ?string
     {
         return $this->code;
     }

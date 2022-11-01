@@ -24,12 +24,13 @@ final class EndpointAnnotation extends Annotation
 
         if(Patterns::isJSON($this->value) || Patterns::isArray($this->value))
         {
+            
             return Arrays::combineResults($existing, "endpoint", $this->value, Arrays::COMBINE_MODE_MERGE);
         }
         else
         {
             // ?
-            return [];
+            return $existing;
         }
     }
 }

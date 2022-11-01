@@ -311,7 +311,7 @@ final class AnnotationReader
                     // OTHERWISE, append this value to the existing array!
 
                     // IF the current value is NOT an array...
-                    if (!is_array($value)) {
+                    //if (!is_array($value)) {
                         // THEN, assume the other values under this @<param> are also NOT arrays...
                         if (!is_array($params[$key])) {
                             $oldValue = $params[$key];
@@ -320,9 +320,9 @@ final class AnnotationReader
                         }
 
                         $params[$key][] = $value;
-                    } else {
-                        $params[$key] = array_merge($params[$key], $value);
-                    }
+                    //} else {
+                    //    $params[$key] = array_merge($params[$key], $value);
+                    //}
 
                 }
             } else {

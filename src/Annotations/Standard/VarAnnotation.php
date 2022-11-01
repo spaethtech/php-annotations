@@ -29,7 +29,7 @@ final class VarAnnotation extends Annotation
      */
     public function parse(array $existing = []): array
     {
-        $pattern = '/^([\w|\[\]_\\\]+)\s*(?:\$(\w+))?(.*)?$/';
+        $pattern = '/^([\w|\[\]_\\\\]+)\s*(\$\w+)?(.*)?$/';
 
         if (preg_match($pattern, $this->value, $matches)) {
             $existing["var"]["types"] = explode("|", $matches[1]);
