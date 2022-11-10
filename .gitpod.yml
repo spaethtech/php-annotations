@@ -1,1 +1,2 @@
-image: php:7.4-alpine
+image:
+    file: .gitpod.Dockerfile
