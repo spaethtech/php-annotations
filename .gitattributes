@@ -1,0 +1,9 @@
+
+.idea/          export-ignore
+examples/       export-ignore
+tests/          export-ignore
+.bashrc         export-ignore
+.editorconfig   export-ignore
+.gitpod.*       export-ignore
+phpunit.xml     export-ignore
+RoboFile.php    export-ignore
