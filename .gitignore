@@ -1,7 +1,5 @@
 .cache/
 vendor/
-composer.lock
-
 tests/.cache/
-
 **/.env
+composer.lock
