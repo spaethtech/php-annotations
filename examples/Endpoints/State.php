@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace SpaethTech\Endpoints;
+namespace Examples\Endpoints;
 
 /**
  * Class State
@@ -12,7 +13,7 @@ namespace SpaethTech\Endpoints;
  * @method string|null getName()
  * @method string|null getCode()
  *
- * @package SpaethTech\Annotations\Examples
+ * @package SpaethTech\Annotations
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
  * @copyright 2020 - Spaeth Technologies Inc.
  * @final

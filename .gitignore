@@ -1,5 +1,4 @@
-.cache/
+.idea/
 vendor/
-tests/.cache/
 **/.env
 composer.lock

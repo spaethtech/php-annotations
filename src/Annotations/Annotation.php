@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace SpaethTech\Annotations;
@@ -11,9 +12,9 @@ use SpaethTech\Annotations\Exceptions\AnnotationDeclarationException;
  * The base class for all built-in and user-defined Annotations.
  *
  * @package SpaethTech\Annotations
- * 
+ *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
- * @copyright 2022, Spaeth Technologies Inc.
+ * @copyright 2022 Spaeth Technologies Inc.
  */
 abstract class Annotation
 {

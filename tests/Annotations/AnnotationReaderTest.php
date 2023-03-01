@@ -1,39 +1,42 @@
 <?php
 declare(strict_types=1);
 
-namespace SpaethTech\Annotations;
+namespace Tests\Annotations;
 
+use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
-use SpaethTech\Common\FileSystem;
-use SpaethTech\Endpoints\Country;
-use SpaethTech\Endpoints\State;
-use PHPUnit\Framework\TestCase;
+use Examples\Endpoints\Country;
+use Examples\Endpoints\State;
+use SpaethTech\Annotations\AnnotationReader;
+use SpaethTech\Support\FileSystem;
 
 /**
  * Class AnnotationReaderTests
  *
  * @package SpaethTech\Annotations
+ *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022 Spaeth Technologies Inc.
  */
 class AnnotationReaderTest extends TestCase
 {
     protected ?AnnotationReader $countryAnnotationReader = null;
     protected ?AnnotationReader $stateAnnotationReader = null;
-    
+
     protected function setUp(): void
     {
         AnnotationReader::cacheDir(PROJECT_DIR . "/.cache");
-        
+
         $this->countryAnnotationReader = new AnnotationReader(Country::class);
         $this->stateAnnotationReader = new AnnotationReader(State::class);
     }
-    
+
     // =================================================================================================================
     // HELPERS
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @throws ReflectionException
      */
@@ -41,7 +44,7 @@ class AnnotationReaderTest extends TestCase
     {
         $this->countryAnnotationReader->getAnnotations();
     }
-    
+
     /**
      * @throws ReflectionException
      */
@@ -49,7 +52,7 @@ class AnnotationReaderTest extends TestCase
     {
         $this->stateAnnotationReader->getAnnotations();
     }
-    
+
     // =================================================================================================================
     // TESTS: Cache
     // -----------------------------------------------------------------------------------------------------------------
@@ -75,7 +78,7 @@ class AnnotationReaderTest extends TestCase
         // Reset to the normal location!
         AnnotationReader::cacheDir($expected);
     }
-    
+
     /**
      *
      * @throws ReflectionException
@@ -94,7 +97,7 @@ class AnnotationReaderTest extends TestCase
         // NOTE: This file should NOT exist, as it is a dynamic method described in the Class annotation.
         $this->assertFileDoesNotExist($path . "/method.getName.json");
     }
-    
+
     /**
      * @covers AnnotationReader::cacheClear
      * @throws ReflectionException
@@ -116,11 +119,11 @@ class AnnotationReaderTest extends TestCase
         $this->assertDirectoryDoesNotExist($countryPath);
         $this->assertDirectoryExists($statePath);
     }
-    
+
     // =================================================================================================================
     // TESTS: Reflection
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @covers AnnotationReader::getReflectedClass
      * @throws ReflectionException
@@ -134,9 +137,9 @@ class AnnotationReaderTest extends TestCase
         echo "> Namespace : {$class->getNamespaceName()}\n";
         echo "\n";
 
-        $this->assertEquals("SpaethTech\\Endpoints\\Country", $class->getName());
+        $this->assertEquals("Examples\\Endpoints\\Country", $class->getName());
     }
-    
+
     /**
      * @covers AnnotationReader::getReflectedMethods
      * @throws ReflectionException
@@ -156,7 +159,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertCount(1, $methods);
     }
-    
+
     /**
      * @covers AnnotationReader::getReflectedMethod
      * @throws ReflectionException
@@ -171,9 +174,9 @@ class AnnotationReaderTest extends TestCase
         echo "\n";
 
         $this->assertEquals("getCode", $method->getName());
-        
+
     }
-    
+
     /**
      * @covers AnnotationReader::getReflectedProperties
      * @throws ReflectionException
@@ -193,7 +196,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertCount(2, $properties);
     }
-    
+
     /**
      * @covers AnnotationReader::getReflectedProperty
      * @throws ReflectionException
@@ -213,7 +216,7 @@ class AnnotationReaderTest extends TestCase
     // =================================================================================================================
     // TESTS: Namespace/Misc
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @covers AnnotationReader::getUseStatements
      * @throws ReflectionException
@@ -232,7 +235,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertGreaterThan(0, count($uses));
     }
-    
+
     /**
      * @covers AnnotationReader::getNamespace
      * @throws ReflectionException
@@ -245,9 +248,9 @@ class AnnotationReaderTest extends TestCase
         echo "> $namespace\n";
         echo "\n";
 
-        $this->assertEquals("SpaethTech\\Endpoints", $namespace);
+        $this->assertEquals("Examples\\Endpoints", $namespace);
     }
-    
+
     /**
      * @covers AnnotationReader::findAnnotationClass
      * @throws ReflectionException
@@ -260,13 +263,13 @@ class AnnotationReaderTest extends TestCase
         echo "> $annotationClass\n";
         echo "\n";
 
-        $this->assertEquals("SpaethTech\\Annotations\\EndpointAnnotation", $annotationClass);
+        $this->assertEquals("Examples\\Annotations\\EndpointAnnotation", $annotationClass);
     }
-    
+
     // =================================================================================================================
     // TESTS: Class
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @covers AnnotationReader::getClassAnnotations
      * @throws ReflectionException
@@ -278,7 +281,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertEquals("rspaeth@spaethtech.com", $annotations["author"]["email"]);
     }
-    
+
     /**
      * @covers AnnotationReader::getClassAnnotation
      * @throws ReflectionException
@@ -290,7 +293,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertEquals("/countries", $annotations["get"]);
     }
-    
+
     /**
      * @covers AnnotationReader::getClassAnnotationsLike
      * @throws ReflectionException
@@ -302,7 +305,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertCount(2, $annotations);
     }
-    
+
     /**
      * @covers AnnotationReader::hasClassAnnotation
      * @throws ReflectionException
@@ -313,11 +316,11 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertTrue($annotations);
     }
-    
+
     // =================================================================================================================
     // TESTS: Methods
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @covers AnnotationReader::getMethodAnnotations
      * @throws ReflectionException
@@ -334,7 +337,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertArrayHasKey("return", $annotations["getCode"]);
     }
-    
+
     /**
      * @covers AnnotationReader::getMethodAnnotation
      * @throws ReflectionException
@@ -347,7 +350,7 @@ class AnnotationReaderTest extends TestCase
         $this->assertArrayHasKey("types", $annotations);
         $this->assertArrayHasKey("description", $annotations);
     }
-    
+
     /**
      * @covers AnnotationReader::getMethodAnnotationsLike
      * @throws ReflectionException
@@ -359,7 +362,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertCount(1, $annotations);
     }
-    
+
     /**
      * @covers AnnotationReader::hasMethodAnnotation
      * @throws ReflectionException
@@ -370,11 +373,11 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertTrue($annotations);
     }
-    
+
     // =================================================================================================================
     // TESTS: Properties
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @covers AnnotationReader::getPropertyAnnotations
      * @throws ReflectionException
@@ -392,7 +395,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertArrayHasKey("var", $annotations["name"]);
     }
-    
+
     /**
      * @covers AnnotationReader::getPropertyAnnotation
      * @throws ReflectionException
@@ -406,7 +409,7 @@ class AnnotationReaderTest extends TestCase
         $this->assertArrayHasKey("name", $annotations);
         $this->assertArrayHasKey("description", $annotations);
     }
-    
+
     /**
      * @covers AnnotationReader::getPropertyAnnotationsLike
      * @throws ReflectionException
@@ -418,7 +421,7 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertCount(1, $annotations);
     }
-    
+
     /**
      * @covers AnnotationReader::hasPropertyAnnotations
      * @throws ReflectionException
@@ -429,7 +432,5 @@ class AnnotationReaderTest extends TestCase
 
         $this->assertTrue($annotations);
     }
-
-
 
 }

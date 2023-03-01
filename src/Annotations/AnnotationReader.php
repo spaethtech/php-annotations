@@ -1,10 +1,8 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace SpaethTech\Annotations;
-
-use SpaethTech\Common\FileSystem;
-use SpaethTech\Common\Strings;
 
 use DateTime;
 use Exception;
@@ -12,15 +10,17 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
+use SpaethTech\Support\FileSystem;
+use SpaethTech\Support\Strings;
 
 /**
  * Class AnnotationReader
  *
  * @package SpaethTech\Annotations
- * 
+ *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
- * @copyright 2022, Spaeth Technologies Inc.
- * 
+ * @copyright 2022 Spaeth Technologies Inc.
+ *
  * @final
  */
 final class AnnotationReader
@@ -254,7 +254,7 @@ final class AnnotationReader
                     $annotationClass = $this->findAnnotationClass($key);
 
                 if ($annotationClass !== null) {
-                    $occurrences = defined("$annotationClass::SUPPORTED_DUPLICATES") ? 
+                    $occurrences = defined("$annotationClass::SUPPORTED_DUPLICATES") ?
                         $annotationClass::SUPPORTED_DUPLICATES : true;
 
                     if (!$occurrences && array_key_exists($key, $params))
@@ -547,7 +547,7 @@ final class AnnotationReader
     // =================================================================================================================
     // METHODS: Class Annotations
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @return array Returns an associative array of all annotations for the current class.
      * @throws ReflectionException Throws an Exception if there are any issues "reflecting" the object(s).
@@ -568,7 +568,7 @@ final class AnnotationReader
         $docBlock = $this->getReflectedClass()->getDocComment();
         return $docBlock ? $this->parse(self::PARSE_TYPE_CLASS, $docBlock) : [];
     }
-    
+
     /**
      * @param string $keyword The keyword of an annotation for this class.
      * @return mixed Returns the value of the specified annotation for the current class.
@@ -614,7 +614,7 @@ final class AnnotationReader
     // =================================================================================================================
     // METHODS: Method Annotations
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @param string|string[] $methods
      *
@@ -665,10 +665,10 @@ final class AnnotationReader
 //            return $annotations[$methods[0]];
 //        }
 
-        
+
         return $annotations;
     }
-    
+
     /**
      * @param string $method The method of the current class for which to examine.
      * @param string $keyword The keyword of an annotation for this method.
@@ -717,7 +717,7 @@ final class AnnotationReader
     // =================================================================================================================
     // METHODS: Property Annotations
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /**
      * @param string[]|string $properties
      *
@@ -730,7 +730,7 @@ final class AnnotationReader
     {
         //if (is_string($properties))
         //    $properties = [ $properties ];
-        
+
         //if ($properties === null || $properties === [])
         if ($properties === [])
         {

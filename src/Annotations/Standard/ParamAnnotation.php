@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace SpaethTech\Annotations\Standard;
@@ -9,10 +10,10 @@ use SpaethTech\Annotations\Annotation;
  * Class ParamAnnotation
  *
  * @package SpaethTech\Annotations\Standard
- * 
+ *
  * @author Ryan Spaeth <rspaeth@spaethtech.com>
- * @copyright 2022, Spaeth Technologies Inc.
- * 
+ * @copyright 2022 Spaeth Technologies Inc.
+ *
  * @final
  */
 final class ParamAnnotation extends Annotation

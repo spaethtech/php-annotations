@@ -1,10 +1,15 @@
 <?php
+/**
+ * @noinspection PhpUnused
+ * @noinspection PhpUnusedAliasInspection
+ * @noinspection PhpUnusedParameterInspection
+ */
 declare(strict_types=1);
 
-namespace SpaethTech\Endpoints;
+namespace Examples\Endpoints;
 
-use SpaethTech\Annotations\EndpointAnnotation;
-use SpaethTech\Annotations\EndpointAnnotation as Endpoint;
+use Examples\Annotations\EndpointAnnotation;
+use Examples\Annotations\EndpointAnnotation as Endpoint;
 
 /**
  * Class Country
@@ -16,7 +21,7 @@ use SpaethTech\Annotations\EndpointAnnotation as Endpoint;
  *
  * @other-endpoints { "get": "/countries", "getById": "/countries/:id" }
  * @Endpoint [ "get" => "/countries" ]
- * @\SpaethTech\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
+ * @\Examples\Annotations\EndpointAnnotation { "getById": "/countries/:id" }
  * @EndpointAnnotation [ "post" => "/countries" ]
  *
  * @method string|null getName()
