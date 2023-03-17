@@ -1,5 +1,5 @@
 {
-    "name": "spaethtech/annotations",
+    "name": "spaethtech/php-annotations",
     "description": "An extensible PHP DocBlock Annotation parsing library for our projects.",
     "type": "library",
     "license": "MIT",
